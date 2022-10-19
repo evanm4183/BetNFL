@@ -10,19 +10,19 @@ namespace BetNFL.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserProfileController : ControllerBase
     {
-        private readonly IUserRepository _userRepo;
+        private readonly IUserProfileRepository _userProfileRepo;
 
-        public UserController(IUserRepository userRepo)
+        public UserProfileController(IUserProfileRepository userProfileRepo)
         {
-            _userRepo = userRepo;
+            _userProfileRepo = userProfileRepo;
         }
 
         [HttpGet("DoesUserExist/{firebaseUserId}")]
         public IActionResult DoesUserExist(string firebaseUserId)
         {
-            var user = _userRepo.GetByFirebaseUserId(firebaseUserId);
+            var user = _userProfileRepo.GetByFirebaseUserId(firebaseUserId);
             if (user == null)
             {
                 return NotFound();
@@ -38,10 +38,10 @@ namespace BetNFL.Controllers
             return Ok(currentUser.UserType.Name == "Admin");
         }
 
-        private User GetCurrentUserProfile()
+        private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return _userRepo.GetByFirebaseUserId(firebaseUserId);
+            return _userProfileRepo.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }

@@ -15,12 +15,6 @@ export default function Header({ isLoggedIn, isAdmin }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
-  console.log(isAdmin)
-
-  if (isAdmin === null) {
-    return "";
-  }
-
   return (
     <div>
       <Navbar color="light" light expand="md">

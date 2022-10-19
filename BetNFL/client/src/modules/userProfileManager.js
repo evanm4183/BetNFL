@@ -1,6 +1,6 @@
 import { getToken } from "./authManager"
 
-const apiUrl = "/api/user"
+const apiUrl = "/api/userProfile"
 
 export const getAdminStatus = () => {
     return getToken()?.then((token) => {

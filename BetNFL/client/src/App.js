@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from "react-router-dom";
 import { Spinner } from 'reactstrap';
 import { onLoginStatusChange} from "./modules/authManager";
-import { getAdminStatus } from './modules/userManager';
+import { getAdminStatus } from './modules/userProfileManager';
 import "firebase/auth";
 import ApplicationViews from './components/ApplicationViews';
 import Header from './components/Header';

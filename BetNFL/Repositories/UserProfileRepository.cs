@@ -4,11 +4,11 @@ using BetNFL.Utils;
 
 namespace BetNFL.Repositories
 {
-    public class UserRepository : BaseRepository, IUserRepository
+    public class UserProfileRepository : BaseRepository, IUserProfileRepository
     {
-        public UserRepository(IConfiguration configuration) : base(configuration) { }
+        public UserProfileRepository(IConfiguration configuration) : base(configuration) { }
 
-        public User GetByFirebaseUserId(string firebaseUserId)
+        public UserProfile GetByFirebaseUserId(string firebaseUserId)
         {
             using (var conn = Connection)
             {
@@ -16,12 +16,12 @@ namespace BetNFL.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT u.Id, u.UserTypeId, u.Email,u.Username,
-                               u.FirebaseUserId, u.AvailableFunds,
-                               u.IsApproved, ut.Name
-                        FROM [User] u
-                            LEFT JOIN UserType ut ON ut.Id = u.UserTypeId
-                        WHERE u.FirebaseUserId = @firebaseUserId
+                        SELECT up.Id, up.UserTypeId, up.Email, up.Username,
+                               up.FirebaseUserId, up.AvailableFunds,
+                               up.IsApproved, ut.Name
+                        FROM UserProfile up
+                            LEFT JOIN UserType ut ON ut.Id = up.UserTypeId
+                        WHERE up.FirebaseUserId = @firebaseUserId
                     ";
                     cmd.Parameters.AddWithValue("@firebaseUserId", firebaseUserId);
 
@@ -29,7 +29,7 @@ namespace BetNFL.Repositories
                     {
                         if (reader.Read())
                         {
-                            var user = new User()
+                            var user = new UserProfile()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 Email = DbUtils.GetString(reader, "Email"),
