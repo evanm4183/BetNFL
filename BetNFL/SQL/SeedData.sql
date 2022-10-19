@@ -33,3 +33,6 @@ VALUES
 ('Tampa Bay', 'Buccaneers', 'TB', 'https://loodibee.com/wp-content/uploads/tampa-bay-buccaneers-2020-logo.png'),
 ('Tennessee', 'Titans', 'TEN', 'https://loodibee.com/wp-content/uploads/nfl-tennessee-titans-team-logo-2.png'),
 ('Washington', 'Commanders', 'WAS', 'https://loodibee.com/wp-content/uploads/washington-commanders-logo.png');
+
+INSERT INTO SiteTime (CurrentYear, CurrentWeek)
+VALUES (2022, 1);
