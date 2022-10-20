@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./Login";
-import Register from "./Register";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
+import SetTimeForm from "./setTime/SetTimeForm";
 
-export default function ApplicationViews({isLoggedIn}) {
+export default function ApplicationViews({isLoggedIn, isAdmin}) {
     return (
         <Routes>
             <Route path="/">
-                {console.log(isLoggedIn)}
                 <Route
                     index
                     element={isLoggedIn ? <div>Games</div> : <Navigate to="/login" />}
@@ -15,18 +15,23 @@ export default function ApplicationViews({isLoggedIn}) {
                 <Route path="register" element={<Register />} />
 
                 {/* Admin Routes */}
-                <Route 
-                    path="addGame" 
-                    element={isLoggedIn ? <div>Add Game</div> : <Navigate to="/login" />} 
-                />
-                <Route 
-                    path="setWeek" 
-                    element={isLoggedIn ? <div>Set Current Week</div> : <Navigate to="/login" />}
-                />
-                <Route 
-                    path="processBets" 
-                    element={isLoggedIn ? <div>Process Bets</div> : <Navigate to="/login" />}
-                />
+                {
+                    isAdmin &&
+                    <>
+                        <Route 
+                            path="addGame" 
+                            element={isLoggedIn ? <div>Add Game</div> : <Navigate to="/login" />} 
+                        />
+                        <Route 
+                            path="setTime" 
+                            element={isLoggedIn ? <SetTimeForm /> : <Navigate to="/login" />}
+                        />
+                        <Route 
+                            path="processBets" 
+                            element={isLoggedIn ? <div>Process Bets</div> : <Navigate to="/login" />}
+                        /> 
+                    </>
+                }
 
                 {/* Non-Admin Routes */}
                 <Route 
@@ -37,6 +42,8 @@ export default function ApplicationViews({isLoggedIn}) {
                     path="profile" 
                     element={isLoggedIn ? <div>Profile</div> : <Navigate to="/login" />} 
                 />
+
+                <Route path="*" element={<div>Nothing found...</div>} />
             </Route>
         </Routes>
     )

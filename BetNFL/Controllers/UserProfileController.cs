@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using BetNFL.Repositories;
-using BetNFL.Models;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using BetNFL.Repositories;
+using BetNFL.Utils;
 
 namespace BetNFL.Controllers
 {
@@ -33,15 +31,7 @@ namespace BetNFL.Controllers
         [HttpGet("IsAdmin")]
         public IActionResult IsAdmin()
         {
-            var currentUser = GetCurrentUserProfile();
-
-            return Ok(currentUser.UserType.Name == "Admin");
-        }
-
-        private UserProfile GetCurrentUserProfile()
-        {
-            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return _userProfileRepo.GetByFirebaseUserId(firebaseUserId);
+            return Ok(AuthUtils.IsCurrentUserAdmin(User, _userProfileRepo));
         }
     }
 }

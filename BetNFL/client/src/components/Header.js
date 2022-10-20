@@ -18,6 +18,11 @@ export default function Header({ isLoggedIn, isAdmin }) {
   return (
     <div>
       <Navbar color="light" light expand="md">
+        <img 
+          src="https://loodibee.com/wp-content/uploads/nfl-league-logo.png"
+          alt="NFL Logo"
+          height={50}
+        />
         <NavbarBrand tag={RRNavLink} to="/">BetNFL</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -36,7 +41,7 @@ export default function Header({ isLoggedIn, isAdmin }) {
                     <NavLink tag={RRNavLink} to="/addGame">Add Game</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink tag={RRNavLink} to="/setWeek">Set Current Week</NavLink>
+                    <NavLink tag={RRNavLink} to="/setTime">Set Site Time</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink tag={RRNavLink} to="/processBets">Process Bets</NavLink>
