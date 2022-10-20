@@ -31,6 +31,7 @@ namespace BetNFL
         {
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<ISiteTimeRepository, SiteTimeRepository>();
+            services.AddTransient<ITeamRepository, TeamRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
