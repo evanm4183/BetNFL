@@ -1,29 +1,33 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 import "../../styles/form-styles.css";
-import { getSiteTime } from "../../modules/siteTimeManager";
+import { getSiteTime, updateSiteTime } from "../../modules/siteTimeManager";
 
 export default function SetTimeForm() {
-    const [currentTime, setCurrentTime] = useState({week: "", year: ""});
-    const [newTime, setNewTime] = useState({week: "", year: ""});
+    const [currentTime, setCurrentTime] = useState({"currentWeek": "", "currentYear": ""});
+    const [newTime, setNewTime] = useState({"currentWeek": "", "currentYear": ""});
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
-        if (newTime.week === currentTime.week && newTime.year === currentTime.year) {
+        if (newTime.currentWeek === currentTime.currentWeek 
+            && newTime.currentYear === currentTime.currentYear) {
             window.alert("Site time remains unchanged");
             return;
         }
-        
+
+        updateSiteTime(newTime).then(() => {navigate("/")});
     }
 
     useEffect(() => {
         getSiteTime().then((siteTime) => {
             setCurrentTime({
-                week: siteTime.currentWeek,
-                year: siteTime.currentYear
+                currentWeek: siteTime.currentWeek,
+                currentYear: siteTime.currentYear
             });
             setNewTime({
-                week: siteTime.currentWeek,
-                year: siteTime.currentYear
+                currentWeek: siteTime.currentWeek,
+                currentYear: siteTime.currentYear
             });
         })
     }, []);
@@ -36,10 +40,10 @@ export default function SetTimeForm() {
                     type="number" 
                     name="currentWeek" 
                     id="current-week" 
-                    defaultValue={currentTime.week}
+                    defaultValue={currentTime.currentWeek}
                     onChange={(e) => {
                         const copy = {...newTime};
-                        copy.week = parseInt(e.target.value);
+                        copy.currentWeek = parseInt(e.target.value);
                         setNewTime(copy);
                     }}
                 /> 
@@ -50,10 +54,10 @@ export default function SetTimeForm() {
                     type="number" 
                     name="currentYear" 
                     id="current-year" 
-                    defaultValue={currentTime.year}
+                    defaultValue={currentTime.currentYear}
                     onChange={(e) => {
                         const copy = {...newTime};
-                        copy.year = parseInt(e.target.value);
+                        copy.currentYear = parseInt(e.target.value);
                         setNewTime(copy);
                     }} 
                 /> 

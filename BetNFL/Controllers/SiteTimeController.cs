@@ -23,5 +23,12 @@ namespace BetNFL.Controllers
         {
             return Ok(_siteTimeRepo.GetSiteTime());
         }
+
+        [HttpPut]
+        public IActionResult UpdateSiteTime(SiteTime siteTime)
+        {
+            _siteTimeRepo.UpdateSiteTime(siteTime);
+            return NoContent();
+        }
     }
 }

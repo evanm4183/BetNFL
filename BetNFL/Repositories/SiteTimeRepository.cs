@@ -35,5 +35,26 @@ namespace BetNFL.Repositories
                 }
             }
         }
+
+        public void UpdateSiteTime(SiteTime siteTime)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE SiteTime
+                        SET
+                            CurrentYear = @currentYear,
+                            CurrentWeek = @currentWeek
+                    ";
+                    cmd.Parameters.AddWithValue("@currentYear", siteTime.CurrentYear);
+                    cmd.Parameters.AddWithValue("@currentWeek", siteTime.CurrentWeek);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
