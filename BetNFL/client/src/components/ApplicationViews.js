@@ -1,7 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import SetTimeForm from "./setTime/SetTimeForm";
+import GameForm from "./games/GameForm";
+import SetTimeForm from "./siteTime/SetTimeForm";
 
 export default function ApplicationViews({isLoggedIn, isAdmin}) {
     return (
@@ -20,7 +21,7 @@ export default function ApplicationViews({isLoggedIn, isAdmin}) {
                     <>
                         <Route 
                             path="addGame" 
-                            element={isLoggedIn ? <div>Add Game</div> : <Navigate to="/login" />} 
+                            element={isLoggedIn ? <GameForm /> : <Navigate to="/login" />} 
                         />
                         <Route 
                             path="setTime" 

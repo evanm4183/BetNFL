@@ -15,7 +15,10 @@ namespace BetNFL.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT * FROM Team";
+                    cmd.CommandText = @"
+                        SELECT * FROM Team
+                        ORDER BY LocationName ASC, TeamName ASC
+                    ";
 
                     using (var reader = cmd.ExecuteReader())
                     {
