@@ -16,7 +16,7 @@ export default function SetTimeForm() {
             return;
         }
 
-        updateSiteTime(newTime).then(() => {navigate("/")});
+        updateSiteTime(newTime).then(navigate("/"));
     }
 
     useEffect(() => {

@@ -4,10 +4,12 @@ import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import "../../styles/form-styles.css";
 import { getTeams } from "../../modules/teamManager";
 import { getSiteTime } from "../../modules/siteTimeManager";
+import { postGame } from "../../modules/gameManager";
 
 export default function GameForm() {
     const [teams, setTeams] = useState([]);
     const [game, setGame] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         getTeams().then((teams) => {
@@ -29,33 +31,8 @@ export default function GameForm() {
     return (
         <Form className="form-container" style={{width: "50%", marginTop: "1%"}}>
             <FormGroup>
-                <Label for="homeTeam">Home Team</Label>
-                <Input type="select" name="homeTeam" id="home-team" onChange={(e) => {
-                    const homeTeamId = parseInt(e.target.value);
-
-                    if (homeTeamId === game.awayTeamId) {
-                        window.alert("Error: The same team cannot be selected for both the home and away team");
-                        return;
-                    }
-
-                    const copy = {...game}
-                    copy.homeTeamId = homeTeamId;
-                    setGame(copy);
-                }}>
-                    <option id="team--0" value={0}>Select a Team...</option>
-                    {
-                        teams.map((team) => {
-                            return <option 
-                                key={`team--${team.id}`} 
-                                value={team.id}
-                            >{team.fullName}</option>
-                        })
-                    }
-                </Input>
-            </FormGroup>
-            <FormGroup>
                 <Label for="awayTeam">Away Team</Label>
-                <Input type="select" name="awayTeam" id="away-team" onChange={(e) => {
+                <Input type="select" name="awayTeam" id="away-team" value={game.awayTeamId} onChange={(e) => {
                     const awayTeamId = parseInt(e.target.value);
 
                     if (awayTeamId === game.homeTeamId) {
@@ -72,6 +49,31 @@ export default function GameForm() {
                         teams.map((team) => {
                             return <option 
                                 key={`team--${team.id}`}
+                                value={team.id}
+                            >{team.fullName}</option>
+                        })
+                    }
+                </Input>
+            </FormGroup>
+            <FormGroup>
+                <Label for="homeTeam">Home Team</Label>
+                <Input type="select" name="homeTeam" id="home-team" value={game.homeTeamId} onChange={(e) => {
+                    const homeTeamId = parseInt(e.target.value);
+
+                    if (homeTeamId === game.awayTeamId) {
+                        window.alert("Error: The same team cannot be selected for both the home and away team");
+                        return;
+                    }
+
+                    const copy = {...game}
+                    copy.homeTeamId = homeTeamId;
+                    setGame(copy);
+                }}>
+                    <option id="team--0" value={0}>Select a Team...</option>
+                    {
+                        teams.map((team) => {
+                            return <option 
+                                key={`team--${team.id}`} 
                                 value={team.id}
                             >{team.fullName}</option>
                         })
@@ -107,10 +109,18 @@ export default function GameForm() {
                 /> 
             </FormGroup>
             <Button onClick={() => {
+                console.log(game)
                 if (game.homeTeamId === 0 || game.awayTeamId === 0) {
                     window.alert("Error: Must select a home and away team");
                     return;
                 }
+
+                postGame(game).then(() => {
+                    const copy = {...game};
+                    copy.awayTeamId = 0;
+                    copy.homeTeamId = 0;
+                    setGame(copy);
+                });
             }}>Submit</Button>
         </Form>
     );

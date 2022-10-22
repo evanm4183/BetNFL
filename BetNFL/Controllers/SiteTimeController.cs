@@ -29,13 +29,13 @@ namespace BetNFL.Controllers
         [HttpPut]
         public IActionResult UpdateSiteTime(SiteTime siteTime)
         {
-            if (!AuthUtils.IsCurrentUserAdmin(User, _userProfileRepo))
+            if (AuthUtils.IsCurrentUserAdmin(User, _userProfileRepo))
             {
-                return Unauthorized();
+                _siteTimeRepo.UpdateSiteTime(siteTime);
+                return NoContent();
             }
 
-            _siteTimeRepo.UpdateSiteTime(siteTime);
-            return NoContent();
+            return Unauthorized();
         }
     }
 }

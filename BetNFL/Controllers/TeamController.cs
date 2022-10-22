@@ -5,7 +5,7 @@ using BetNFL.Repositories;
 
 namespace BetNFL.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TeamController : ControllerBase
