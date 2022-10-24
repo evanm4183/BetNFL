@@ -21,6 +21,12 @@ namespace BetNFL.Controllers
             _userProfileRepo = userProfileRepo;
         }
 
+        [HttpGet("{week}")]
+        public IActionResult GetAllGamesInWeek(int week)
+        {
+            return Ok(_gameRepo.GetAllGamesInWeek(week));
+        }
+
         [HttpPost]
         public IActionResult PostGame(Game game)
         {
