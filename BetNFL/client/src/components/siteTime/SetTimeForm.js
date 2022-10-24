@@ -5,8 +5,8 @@ import "../../styles/form-styles.css";
 import { getSiteTime, updateSiteTime } from "../../modules/siteTimeManager";
 
 export default function SetTimeForm() {
-    const [currentTime, setCurrentTime] = useState({"currentWeek": "", "currentYear": ""});
-    const [newTime, setNewTime] = useState({"currentWeek": "", "currentYear": ""});
+    const [currentTime, setCurrentTime] = useState({currentWeek: "", currentYear: ""});
+    const [newTime, setNewTime] = useState({currentWeek: "", currentYear: ""});
     const navigate = useNavigate();
 
     const handleSubmit = () => {
@@ -16,7 +16,7 @@ export default function SetTimeForm() {
             return;
         }
 
-        updateSiteTime(newTime).then(() => {navigate("/")});
+        updateSiteTime(newTime).then(navigate("/"));
     }
 
     useEffect(() => {
