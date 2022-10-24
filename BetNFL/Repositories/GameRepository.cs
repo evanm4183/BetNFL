@@ -16,12 +16,13 @@ namespace BetNFL.Repositories
                 {
                     cmd.CommandText = @"
                         INSERT INTO Game
-                            (HomeTeamId, AwayTeamId, HomeTeamScore, AwayTeamScore, Week, Year)
+                            (HomeTeamId, AwayTeamId, HomeTeamScore, AwayTeamScore, KickoffTime, Week, Year)
                         VALUES
-                            (@homeTeamId, @awayTeamId, NULL, NULL, @week, @year)
+                            (@homeTeamId, @awayTeamId, NULL, NULL, @kickoffTime, @week, @year)
                     ";
                     cmd.Parameters.AddWithValue("@homeTeamId", game.HomeTeamId);
                     cmd.Parameters.AddWithValue("@awayTeamId", game.AwayTeamId);
+                    cmd.Parameters.AddWithValue("@kickoffTime", game.KickoffTime);
                     cmd.Parameters.AddWithValue("@week", game.Week);
                     cmd.Parameters.AddWithValue("@year", game.Year);
 

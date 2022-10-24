@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import "../../styles/form-styles.css";
 import { getTeams } from "../../modules/teamManager";
@@ -9,17 +8,20 @@ import { postGame } from "../../modules/gameManager";
 export default function GameForm() {
     const [teams, setTeams] = useState([]);
     const [game, setGame] = useState({});
-    const navigate = useNavigate();
 
     useEffect(() => {
         getTeams().then((teams) => {
             setTeams(teams);
         }).then(
             getSiteTime().then((siteTime) => {
+                const date = new Date();
+                const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
                 setGame(
                     {
                         homeTeamId: 0,
                         awayTeamId: 0,
+                        kickoffTime: `${dateStr}T12:00`,
                         week: siteTime.currentWeek,
                         year: siteTime.currentYear
                     }
@@ -33,15 +35,8 @@ export default function GameForm() {
             <FormGroup>
                 <Label for="awayTeam">Away Team</Label>
                 <Input type="select" name="awayTeam" id="away-team" value={game.awayTeamId} onChange={(e) => {
-                    const awayTeamId = parseInt(e.target.value);
-
-                    if (awayTeamId === game.homeTeamId) {
-                        window.alert("Error: The same team cannot be selected for both the home and away team");
-                        return;
-                    }
-
                     const copy = {...game}
-                    copy.awayTeamId = awayTeamId;
+                    copy.awayTeamId = parseInt(e.target.value);
                     setGame(copy);
                 }}>
                     <option id="team--0">Select a Team...</option>
@@ -58,15 +53,8 @@ export default function GameForm() {
             <FormGroup>
                 <Label for="homeTeam">Home Team</Label>
                 <Input type="select" name="homeTeam" id="home-team" value={game.homeTeamId} onChange={(e) => {
-                    const homeTeamId = parseInt(e.target.value);
-
-                    if (homeTeamId === game.awayTeamId) {
-                        window.alert("Error: The same team cannot be selected for both the home and away team");
-                        return;
-                    }
-
                     const copy = {...game}
-                    copy.homeTeamId = homeTeamId;
+                    copy.homeTeamId = parseInt(e.target.value);
                     setGame(copy);
                 }}>
                     <option id="team--0" value={0}>Select a Team...</option>
@@ -81,7 +69,21 @@ export default function GameForm() {
                 </Input>
             </FormGroup>
             <FormGroup>
-                <Label for="exampleEmail">Current Week</Label>
+                <Label for="exampleEmail">Kickoff Time</Label>
+                <Input 
+                    type="datetime-local" 
+                    name="kickoffTime" 
+                    id="kickoff-time" 
+                    value={game.kickoffTime}
+                    onChange={(e) => {
+                        const copy = {...game};
+                        copy.kickoffTime = e.target.value;
+                        setGame(copy);
+                    }}
+                /> 
+            </FormGroup>
+            <FormGroup>
+                <Label for="currentWeek">Current Week</Label>
                 <Input 
                     type="number" 
                     name="currentWeek" 
@@ -95,7 +97,7 @@ export default function GameForm() {
                 /> 
             </FormGroup>
             <FormGroup >
-                <Label for="exampleEmail">Current Year</Label>
+                <Label for="currentYear">Current Year</Label>
                 <Input 
                     type="number" 
                     name="currentYear" 
@@ -112,6 +114,9 @@ export default function GameForm() {
                 console.log(game)
                 if (game.homeTeamId === 0 || game.awayTeamId === 0) {
                     window.alert("Error: Must select a home and away team");
+                    return;
+                } else if (game.homeTeamId === game.awayTeamId) {
+                    window.alert("Error: The same team cannot be selected for both the home and away team");
                     return;
                 }
 

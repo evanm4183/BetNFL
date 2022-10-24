@@ -1,4 +1,6 @@
-﻿namespace BetNFL.Models
+﻿using System;
+
+namespace BetNFL.Models
 {
     public class Game
     {
@@ -7,6 +9,7 @@
         public int AwayTeamId { get; set; }
         public int HomeTeamScore { get; set; }
         public int AwayTeamScore { get; set; }
+        public DateTime KickoffTime { get; set; }
         public int Week { get; set; }
         public int Year { get; set; }
     }
