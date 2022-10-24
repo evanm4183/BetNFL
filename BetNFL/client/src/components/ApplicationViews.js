@@ -3,6 +3,7 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import GameForm from "./games/GameForm";
 import SetTimeForm from "./siteTime/SetTimeForm";
+import GameList from "./games/GameList";
 
 export default function ApplicationViews({isLoggedIn, isAdmin}) {
     return (
@@ -10,7 +11,7 @@ export default function ApplicationViews({isLoggedIn, isAdmin}) {
             <Route path="/">
                 <Route
                     index
-                    element={isLoggedIn ? <div>Games</div> : <Navigate to="/login" />}
+                    element={isLoggedIn ? <GameList /> : <Navigate to="/login" />}
                 />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
