@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import "../../styles/game-styles.css";
 
 export default function GameCard({game}) {
+    const navigate = useNavigate();
     
     const getTimeDiv = () => {
         if (game.awayTeamScore && game.homeTeamScore) {
@@ -14,7 +16,7 @@ export default function GameCard({game}) {
     }
 
     const handleClick = () => {
-        console.log("clicked");
+        navigate(`editGame/${game.id}`);
     }
 
     return (
