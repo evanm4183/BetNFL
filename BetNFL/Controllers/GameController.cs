@@ -62,5 +62,17 @@ namespace BetNFL.Controllers
 
             return Unauthorized();
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteGame(int id)
+        {
+            if (AuthUtils.IsCurrentUserAdmin(User, _userProfileRepo))
+            {
+                _gameRepo.DeleteGame(id);
+                return NoContent();
+            }
+
+            return Unauthorized();
+        }
     }
 }

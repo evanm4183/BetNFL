@@ -9,5 +9,6 @@ namespace BetNFL.Repositories
         Game GetGameById(int id);
         void PostGame(Game game);
         void SetScore(Game game);
+        void DeleteGame(int id);
     }
 }
