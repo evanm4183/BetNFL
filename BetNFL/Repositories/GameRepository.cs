@@ -129,6 +129,21 @@ namespace BetNFL.Repositories
             }
         }
 
+        public void DeleteGame(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM Game WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         private Game readGame(SqlDataReader reader)
         {
             Game game = new Game()

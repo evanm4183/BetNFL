@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import "../../styles/form-styles.css";
-import { getGameById, setScore } from "../../modules/gameManager";
+import { getGameById, setScore, deleteGame } from "../../modules/gameManager";
 
 export default function GameEditForm() {
     const [game, setGame] = useState({});
@@ -45,19 +45,23 @@ export default function GameEditForm() {
             </FormGroup>
             <div className="button-row">
                 <Button
-                    onClick={(e) => {
+                    onClick={() => {
                         setScore(game).then(() => {navigate("/")});
                     }}
                 >Save Changes</Button>
                 <Button 
-                    onClick={(e) => {
+                    onClick={() => {
                         const copy= {...game};
                         copy.awayTeamScore = null;
                         copy.homeTeamScore = null;
                         setGame(copy);
                     }}
                 >Clear Scores</Button>
-                <Button>Delete Game</Button>
+                <Button
+                    onClick={() => {
+                        deleteGame(game.id).then(() => {navigate("/")})
+                    }}
+                >Delete Game</Button>
             </div>
         </Form>
     );
