@@ -31,14 +31,20 @@ export default function GameForm() {
     }, []);
 
     return (
-        <Form className="form-container" style={{width: "50%", marginTop: "1%"}}>
+        <Form className="form-container" style={{width: "50%"}}>
             <FormGroup>
                 <Label for="awayTeam">Away Team</Label>
-                <Input type="select" name="awayTeam" id="away-team" value={game.awayTeamId} onChange={(e) => {
-                    const copy = {...game}
-                    copy.awayTeamId = parseInt(e.target.value);
-                    setGame(copy);
-                }}>
+                <Input 
+                    type="select" 
+                    name="awayTeam" 
+                    id="away-team" 
+                    value={game.awayTeamId} 
+                    onChange={(e) => {
+                        const copy = {...game}
+                        copy.awayTeamId = parseInt(e.target.value);
+                        setGame(copy);
+                    }}
+                >
                     <option id="team--0">Select a Team...</option>
                     {
                         teams.map((team) => {
@@ -52,11 +58,17 @@ export default function GameForm() {
             </FormGroup>
             <FormGroup>
                 <Label for="homeTeam">Home Team</Label>
-                <Input type="select" name="homeTeam" id="home-team" value={game.homeTeamId} onChange={(e) => {
-                    const copy = {...game}
-                    copy.homeTeamId = parseInt(e.target.value);
-                    setGame(copy);
-                }}>
+                <Input 
+                    type="select" 
+                    name="homeTeam" 
+                    id="home-team" 
+                    value={game.homeTeamId} 
+                    onChange={(e) => {
+                        const copy = {...game}
+                        copy.homeTeamId = parseInt(e.target.value);
+                        setGame(copy);
+                    }}
+                >
                     <option id="team--0" value={0}>Select a Team...</option>
                     {
                         teams.map((team) => {

@@ -2,6 +2,7 @@
 using BetNFL.Models;
 using System.Collections.Generic;
 using BetNFL.Utils;
+using Microsoft.Data.SqlClient;
 
 namespace BetNFL.Repositories
 {
@@ -37,37 +38,46 @@ namespace BetNFL.Repositories
 
                         while (reader.Read())
                         {
-                            Game game = new Game()
-                            {
-                                Id = DbUtils.GetInt(reader, "Id"),
-                                AwayTeamId = DbUtils.GetInt(reader, "AwayTeamId"),
-                                HomeTeamId = DbUtils.GetInt(reader, "HomeTeamId"),
-                                AwayTeamScore = DbUtils.GetNullableInt(reader, "AwayTeamScore"),
-                                HomeTeamScore = DbUtils.GetNullableInt(reader, "HomeTeamScore"),
-                                KickoffTime = DbUtils.GetDateTime(reader, "KickoffTime"),
-                                Week = DbUtils.GetInt(reader, "Week"),
-                                Year = DbUtils.GetInt(reader, "Year"),
-                                AwayTeam = new Team()
-                                {
-                                    Id = DbUtils.GetInt(reader, "AwayTeamId"),
-                                    LocationName = DbUtils.GetString(reader, "AwayLocationName"),
-                                    TeamName = DbUtils.GetString(reader, "AwayTeamName"),
-                                    Abbreviation = DbUtils.GetString(reader, "AwayAbbreviation"),
-                                    LogoUrl = DbUtils.GetString(reader, "AwayLogoUrl")
-                                },
-                                HomeTeam = new Team()
-                                {
-                                    Id = DbUtils.GetInt(reader, "HomeTeamId"),
-                                    LocationName = DbUtils.GetString(reader, "HomeLocationName"),
-                                    TeamName = DbUtils.GetString(reader, "HomeTeamName"),
-                                    Abbreviation = DbUtils.GetString(reader, "HomeAbbreviation"),
-                                    LogoUrl = DbUtils.GetString(reader, "HomeLogoUrl")
-                                }
-                            };
+                            Game game = readGame(reader);
                             games.Add(game);
                         }
 
                         return games;
+                    }
+                }
+            }
+        }
+
+        public Game GetGameById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT g.Id, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
+                               g.AwayTeamScore, g.KickoffTime, g.[Week], g.[Year],
+                               ht.LocationName AS HomeLocationName, ht.TeamName AS HomeTeamName, 
+                               ht.Abbreviation AS HomeAbbreviation, ht.LogoUrl AS HomeLogoUrl,
+                               awt.LocationName AS AwayLocationName, awt.TeamName AS AwayTeamName, 
+                               awt.Abbreviation AS AwayAbbreviation, awt.LogoUrl AS AwayLogoUrl
+                        FROM Game g
+                            LEFT JOIN Team ht ON ht.id = g.HomeTeamId
+                            LEFT JOIN Team awt ON awt.id = g.AwayTeamId
+                        WHERE g.Id = @id
+                    ";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            Game game = readGame(reader);
+                            return game;
+                        }
+
+                        return null;
                     }
                 }
             }
@@ -95,6 +105,61 @@ namespace BetNFL.Repositories
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public void SetScore(Game game)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE Game
+                        SET AwayTeamScore = @awayTeamScore,
+                            HomeTeamScore = @homeTeamScore
+                        WHERE Id = @id
+                    ";
+                    DbUtils.InsertNullableInt(cmd, "@awayTeamScore", game.AwayTeamScore);
+                    DbUtils.InsertNullableInt(cmd, "@homeTeamScore", game.HomeTeamScore);
+                    cmd.Parameters.AddWithValue("@id", game.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private Game readGame(SqlDataReader reader)
+        {
+            Game game = new Game()
+            {
+                Id = DbUtils.GetInt(reader, "Id"),
+                AwayTeamId = DbUtils.GetInt(reader, "AwayTeamId"),
+                HomeTeamId = DbUtils.GetInt(reader, "HomeTeamId"),
+                AwayTeamScore = DbUtils.GetNullableInt(reader, "AwayTeamScore"),
+                HomeTeamScore = DbUtils.GetNullableInt(reader, "HomeTeamScore"),
+                KickoffTime = DbUtils.GetDateTime(reader, "KickoffTime"),
+                Week = DbUtils.GetInt(reader, "Week"),
+                Year = DbUtils.GetInt(reader, "Year"),
+                AwayTeam = new Team()
+                {
+                    Id = DbUtils.GetInt(reader, "AwayTeamId"),
+                    LocationName = DbUtils.GetString(reader, "AwayLocationName"),
+                    TeamName = DbUtils.GetString(reader, "AwayTeamName"),
+                    Abbreviation = DbUtils.GetString(reader, "AwayAbbreviation"),
+                    LogoUrl = DbUtils.GetString(reader, "AwayLogoUrl")
+                },
+                HomeTeam = new Team()
+                {
+                    Id = DbUtils.GetInt(reader, "HomeTeamId"),
+                    LocationName = DbUtils.GetString(reader, "HomeLocationName"),
+                    TeamName = DbUtils.GetString(reader, "HomeTeamName"),
+                    Abbreviation = DbUtils.GetString(reader, "HomeAbbreviation"),
+                    LogoUrl = DbUtils.GetString(reader, "HomeLogoUrl")
+                }
+            };
+
+            return game;
         }
     }
 }

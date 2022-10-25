@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BetNFL.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GameController : ControllerBase
@@ -21,10 +21,22 @@ namespace BetNFL.Controllers
             _userProfileRepo = userProfileRepo;
         }
 
-        [HttpGet("{week}")]
+        [HttpGet("weeklyGames/{week}")]
         public IActionResult GetAllGamesInWeek(int week)
         {
             return Ok(_gameRepo.GetAllGamesInWeek(week));
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetGameById(int id)
+        {
+            Game game = _gameRepo.GetGameById(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(game);
         }
 
         [HttpPost]
@@ -33,6 +45,18 @@ namespace BetNFL.Controllers
             if (AuthUtils.IsCurrentUserAdmin(User, _userProfileRepo))
             {
                 _gameRepo.PostGame(game);
+                return NoContent();
+            }
+
+            return Unauthorized();
+        }
+
+        [HttpPut]
+        public IActionResult SetScore(Game game)
+        {
+            if (AuthUtils.IsCurrentUserAdmin(User, _userProfileRepo))
+            {
+                _gameRepo.SetScore(game);
                 return NoContent();
             }
 

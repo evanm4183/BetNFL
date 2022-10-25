@@ -4,6 +4,7 @@ import Register from "./auth/Register";
 import GameForm from "./games/GameForm";
 import SetTimeForm from "./siteTime/SetTimeForm";
 import GameList from "./games/GameList";
+import GameEditForm from "./games/GameEditForm";
 
 export default function ApplicationViews({isLoggedIn, isAdmin}) {
     return (
@@ -32,6 +33,10 @@ export default function ApplicationViews({isLoggedIn, isAdmin}) {
                             path="processBets" 
                             element={isLoggedIn ? <div>Process Bets</div> : <Navigate to="/login" />}
                         /> 
+                        <Route
+                            path="editGame/:gameId"
+                            element={isLoggedIn ? <GameEditForm /> : <Navigate to="/login" />}
+                        />
                     </>
                 }
 

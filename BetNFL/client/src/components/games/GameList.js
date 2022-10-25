@@ -6,9 +6,12 @@ import { getGamesByWeek } from "../../modules/gameManager";
 
 export default function GameList() {
     const [games, setGames] = useState([]);
+    const [currWeek, setCurrWeek] = useState();
 
     useEffect(() => {
         getSiteTime().then((siteTime) => {
+            setCurrWeek(siteTime.currentWeek);
+
             getGamesByWeek(siteTime.currentWeek).then((games) => {
                 setGames(games);
             });
@@ -17,7 +20,7 @@ export default function GameList() {
     
     return (
         <>
-            <h4 className="game-list-header">Week {games[0]?.week}</h4>
+            <h4 className="game-list-header">Week {currWeek}</h4>
             <div className="game-list-container">
                 {
                     games.map((game) => <GameCard key={game.id} game={game} />)
