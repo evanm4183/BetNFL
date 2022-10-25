@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Data.Common;
 
 namespace BetNFL.Utils
 {
@@ -46,6 +45,18 @@ namespace BetNFL.Utils
         public static DateTime GetDateTime(SqlDataReader reader, string column)
         {
             return reader.GetDateTime(reader.GetOrdinal(column));
+        }
+
+        public static void InsertNullableInt(SqlCommand cmd, string column, int? value)
+        {
+            if (value == null)
+            {
+                cmd.Parameters.AddWithValue(column, DBNull.Value);
+                return;
+            }
+
+            cmd.Parameters.AddWithValue(column, value);
+            return;
         }
     }
 }
