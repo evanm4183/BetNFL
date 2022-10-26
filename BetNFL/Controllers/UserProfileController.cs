@@ -33,5 +33,12 @@ namespace BetNFL.Controllers
         {
             return Ok(AuthUtils.IsCurrentUserAdmin(User, _userProfileRepo));
         }
+
+        [HttpGet("UserType")]
+        public IActionResult GetUserType()
+        {
+            var currentUser = AuthUtils.GetCurrentUserProfile(User, _userProfileRepo);
+            return Ok(currentUser.UserType.Name);
+        }
     }
 }

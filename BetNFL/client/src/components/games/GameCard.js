@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "../../styles/game-styles.css";
 
-export default function GameCard({game}) {
+export default function GameCard({game, isAdmin, isSportsbook}) {
     const navigate = useNavigate();
     
     const getTimeDiv = () => {
@@ -10,13 +10,18 @@ export default function GameCard({game}) {
         }
 
         const date = new Date(game.kickoffTime);
+
         return <div className="time-text">
-            {date.toLocaleTimeString("en-US", {hour: "numeric", minute: "numeric"})}
+            {date.toLocaleTimeString("en-US", {weekday: "short", hour: "numeric", minute: "numeric"})}
         </div>
     }
 
     const handleClick = () => {
-        navigate(`editGame/${game.id}`);
+        if (isAdmin) {
+            navigate(`editGame/${game.id}`);
+        } else if (isSportsbook) {
+            navigate(`createBet/${game.id}`);
+        }
     }
 
     return (

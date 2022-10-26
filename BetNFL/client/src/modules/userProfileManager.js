@@ -14,3 +14,16 @@ export const getAdminStatus = () => {
         });
     });
 }
+
+export const getUserType = () => {
+    return getToken()?.then((token) => {
+        return fetch(`${apiUrl}/UserType`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((res) => {
+            return res.text();
+        });
+    });
+}

@@ -58,5 +58,17 @@ namespace BetNFL.Utils
             cmd.Parameters.AddWithValue(column, value);
             return;
         }
+
+        public static void InsertNullableDouble(SqlCommand cmd, string column, double? value)
+        {
+            if (value == null)
+            {
+                cmd.Parameters.AddWithValue(column, DBNull.Value);
+                return;
+            }
+
+            cmd.Parameters.AddWithValue(column, value);
+            return;
+        }
     }
 }

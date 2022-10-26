@@ -36,3 +36,8 @@ VALUES
 
 INSERT INTO SiteTime (CurrentYear, CurrentWeek)
 VALUES (2022, 1);
+
+INSERT INTO BetType (Name)
+VALUES ('moneyline'),
+	   ('over/under'),
+	   ('spread');
