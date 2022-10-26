@@ -44,5 +44,13 @@ namespace BetNFL.Controllers
 
             return Unauthorized();
         }
+
+        [HttpPut]
+        public IActionResult CloseBet(Bet bet)
+        {
+            _betRepo.CloseBet(bet);
+
+            return NoContent();
+        }
     }
 }

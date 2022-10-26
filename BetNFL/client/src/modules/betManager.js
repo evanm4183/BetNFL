@@ -31,3 +31,16 @@ export const postBet = (bet) => {
         })
     });
 }
+
+export const closeBet = (bet) => {
+    return getToken().then((token) => {
+        return fetch(apiUrl, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(bet)
+        })
+    });
+}

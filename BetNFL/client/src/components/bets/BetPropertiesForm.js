@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import "../../styles/form-styles.css";
 import { getGameById } from "../../modules/gameManager";
-import { postBet, getLiveBetForGame } from "../../modules/betManager";
+import { postBet, getLiveBetForGame, closeBet } from "../../modules/betManager";
 
 
 export default function BetPropertiesForm() {
@@ -17,6 +17,7 @@ export default function BetPropertiesForm() {
             getLiveBetForGame(gameId).then((bet) => {
                 if (bet) {
                     setBet({
+                        id: bet.id,
                         gameId: game.id,
                         betTypeId: 1,
                         line: null,
@@ -25,6 +26,7 @@ export default function BetPropertiesForm() {
                     });
                 } else {
                     setBet({
+                        id: 0,
                         gameId: game.id,
                         betTypeId: 1,
                         line: null,
@@ -66,9 +68,28 @@ export default function BetPropertiesForm() {
                     }}
                 />
             </FormGroup>
-            <Button onClick={() => {
-                postBet(bet).then(() => {navigate("/")})
-            }}>{bet.awayTeamOdds ? "Adjust Odds" : "Open Bet"}</Button>
+            {
+                bet.id 
+                ?
+                    <div className="button-row">
+                        <Button 
+                            onClick={() => {
+                                postBet(bet).then(() => {navigate("/")});
+                            }}
+                        >Adjust Odds</Button>
+                        <Button
+                            onClick={() => {
+                                closeBet(bet).then(() => {navigate("/")});
+                            }}
+                        >Close Bets For Game</Button>
+                    </div>
+                : 
+                    <Button 
+                        onClick={() => {
+                            postBet(bet).then(() => {navigate("/")});
+                        }}
+                    >Open Bet</Button> 
+            }
         </Form>
     );
 }
