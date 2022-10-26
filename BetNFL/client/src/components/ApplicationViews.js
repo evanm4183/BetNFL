@@ -5,14 +5,18 @@ import GameForm from "./games/GameForm";
 import SetTimeForm from "./siteTime/SetTimeForm";
 import GameList from "./games/GameList";
 import GameEditForm from "./games/GameEditForm";
+import BetPropertiesForm from "./bets/BetPropertiesForm";
 
-export default function ApplicationViews({isLoggedIn, isAdmin}) {
+export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
     return (
         <Routes>
             <Route path="/">
                 <Route
                     index
-                    element={isLoggedIn ? <GameList /> : <Navigate to="/login" />}
+                    element={isLoggedIn 
+                                ? <GameList isAdmin={isAdmin} isSportsbook={isSportsbook} /> 
+                                : <Navigate to="/login" />
+                            }
                 />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
@@ -38,6 +42,14 @@ export default function ApplicationViews({isLoggedIn, isAdmin}) {
                             element={isLoggedIn ? <GameEditForm /> : <Navigate to="/login" />}
                         />
                     </>
+                }
+
+                {
+                    isSportsbook && 
+                        <Route
+                            path="createBet/:gameId"
+                            element={isLoggedIn ? <BetPropertiesForm /> : <Navigate to="/login" />}
+                        />
                 }
 
                 {/* Non-Admin Routes */}

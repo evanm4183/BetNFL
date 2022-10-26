@@ -4,7 +4,7 @@ import "../../styles/game-styles.css";
 import { getSiteTime } from "../../modules/siteTimeManager";
 import { getGamesByWeek } from "../../modules/gameManager";
 
-export default function GameList() {
+export default function GameList({isAdmin, isSportsbook}) {
     const [games, setGames] = useState([]);
     const [currWeek, setCurrWeek] = useState();
 
@@ -23,7 +23,14 @@ export default function GameList() {
             <h4 className="game-list-header">Week {currWeek}</h4>
             <div className="game-list-container">
                 {
-                    games.map((game) => <GameCard key={game.id} game={game} />)
+                    games.map((game) => 
+                        <GameCard 
+                            key={game.id} 
+                            game={game} 
+                            isAdmin={isAdmin}
+                            isSportsbook={isSportsbook}
+                        />
+                    )
                 }
             </div>
         </>
