@@ -6,5 +6,6 @@ namespace BetNFL.Repositories
     {
         Bet GetLiveBetForGame(int userProfileId, int gameId);
         void PostBet(Bet bet);
+        void CloseBet(Bet bet);
     }
 }

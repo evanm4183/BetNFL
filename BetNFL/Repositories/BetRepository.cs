@@ -80,5 +80,24 @@ namespace BetNFL.Repositories
                 }
             }
         }
+
+        public void CloseBet(Bet bet)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE Bet
+                        SET IsLive = 0
+                        WHERE Id = @id
+                    ";
+                    cmd.Parameters.AddWithValue("@id", bet.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
