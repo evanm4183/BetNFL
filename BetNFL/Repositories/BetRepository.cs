@@ -8,6 +8,46 @@ namespace BetNFL.Repositories
     {
         public BetRepository(IConfiguration configuration) : base(configuration) { }
 
+        public Bet GetLiveBetForGame(int userProfileId, int gameId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT * FROM Bet
+                        WHERE UserProfileId = @userProfileId
+                            AND GameId = @gameId
+                            AND IsLive = 1
+                    ";
+                    cmd.Parameters.AddWithValue("@userProfileId", userProfileId);
+                    cmd.Parameters.AddWithValue("@gameId", gameId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var bet = new Bet()
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                                GameId = DbUtils.GetInt(reader, "GameId"),
+                                Line = DbUtils.GetNullableInt(reader, "Line"),
+                                AwayTeamOdds = DbUtils.GetInt(reader, "AwayTeamOdds"),
+                                HomeTeamOdds = DbUtils.GetInt(reader, "HomeTeamOdds"),
+                                CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
+                                isLive = DbUtils.GetBoolean(reader, "IsLive")
+                            };
+                            return bet;
+                        }
+
+                        return null;
+                    }
+                }
+            }
+        }
+
         public void PostBet(Bet bet)
         {
             using (var conn = Connection)

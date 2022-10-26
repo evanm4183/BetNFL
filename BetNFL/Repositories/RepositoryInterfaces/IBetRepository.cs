@@ -4,7 +4,7 @@ namespace BetNFL.Repositories
 {
     public interface IBetRepository
     {
-        //Bet GetLiveBetForGame(int userId, int gameId);
+        Bet GetLiveBetForGame(int userProfileId, int gameId);
         void PostBet(Bet bet);
     }
 }

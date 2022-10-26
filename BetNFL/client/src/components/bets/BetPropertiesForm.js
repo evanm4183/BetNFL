@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import "../../styles/form-styles.css";
 import { getGameById } from "../../modules/gameManager";
-import { postBet } from "../../modules/betManager";
+import { postBet, getLiveBetForGame } from "../../modules/betManager";
 
 
 export default function BetPropertiesForm() {
@@ -14,13 +14,26 @@ export default function BetPropertiesForm() {
 
     useEffect(() => {
         getGameById(gameId).then((game) => {
-            setBet({
-                gameId: game.id,
-                betTypeId: 1,
-                line: null,
-                awayTeamOdds: null,
-                homeTeamOdds: null,
+            getLiveBetForGame(gameId).then((bet) => {
+                if (bet) {
+                    setBet({
+                        gameId: game.id,
+                        betTypeId: 1,
+                        line: null,
+                        awayTeamOdds: bet.awayTeamOdds,
+                        homeTeamOdds: bet.homeTeamOdds,
+                    });
+                } else {
+                    setBet({
+                        gameId: game.id,
+                        betTypeId: 1,
+                        line: null,
+                        awayTeamOdds: null,
+                        homeTeamOdds: null,
+                    });
+                }
             });
+
             setGame(game);
         });
     }, []);
@@ -41,7 +54,7 @@ export default function BetPropertiesForm() {
                 />
             </FormGroup>
             <FormGroup>
-            <Label for="homeTeamOdds">{game?.homeTeam?.fullName} Score</Label>
+            <Label for="homeTeamOdds">{game?.homeTeam?.fullName} Odds</Label>
                 <Input 
                     type="number" 
                     name="homeOddsScore"
@@ -55,7 +68,7 @@ export default function BetPropertiesForm() {
             </FormGroup>
             <Button onClick={() => {
                 postBet(bet).then(() => {navigate("/")})
-            }}>Open Bet</Button>
+            }}>{bet.awayTeamOdds ? "Adjust Odds" : "Open Bet"}</Button>
         </Form>
     );
 }

@@ -21,6 +21,14 @@ namespace BetNFL.Controllers
             _userProfileRepo = userProfileRepo;
         }
 
+        [HttpGet("{gameId}")]
+        public IActionResult GetLiveBetForGame(int gameId)
+        {
+            var currentUser = AuthUtils.GetCurrentUserProfile(User, _userProfileRepo);
+
+            return Ok(_betRepo.GetLiveBetForGame(currentUser.Id, gameId));
+        }
+
         [HttpPost]
         public IActionResult PostBet(Bet bet)
         {
