@@ -21,6 +21,8 @@ export default function GameCard({game, isAdmin, isSportsbook}) {
             navigate(`editGame/${game.id}`);
         } else if (isSportsbook) {
             navigate(`createBet/${game.id}`);
+        } else {
+            navigate(`viewBets/${game.id}`);
         }
     }
 

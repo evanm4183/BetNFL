@@ -7,6 +7,7 @@ namespace BetNFL.Repositories
     {
         List<Game> GetAllGamesInWeek(int week);
         Game GetGameById(int id);
+        Game GetGameWithLiveBets(int id);
         void PostGame(Game game);
         void SetScore(Game game);
         void DeleteGame(int id);

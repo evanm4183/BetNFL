@@ -28,6 +28,19 @@ export const getGameById = (id) => {
     });
 }
 
+export const getGameWithLiveBets = (id) => {
+    return getToken().then((token) => {
+        return fetch(`${apiUrl}/getLiveBets/${id}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        }).then((res) => {
+            return res.json();
+        });
+    });
+}
+
 export const postGame = (game) => {
     return getToken().then((token) => {
         return fetch(apiUrl, {

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BetNFL.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GameController : ControllerBase
@@ -37,6 +37,12 @@ namespace BetNFL.Controllers
             }
 
             return Ok(game);
+        }
+
+        [HttpGet("getLiveBets/{id}")]
+        public IActionResult GetGameWithLiveBets(int id)
+        {
+            return Ok(_gameRepo.GetGameWithLiveBets(id));
         }
 
         [HttpPost]

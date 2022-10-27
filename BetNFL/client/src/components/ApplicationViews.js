@@ -6,6 +6,7 @@ import SetTimeForm from "./siteTime/SetTimeForm";
 import GameList from "./games/GameList";
 import GameEditForm from "./games/GameEditForm";
 import BetPropertiesForm from "./bets/BetPropertiesForm";
+import BetList from "./bets/BetList";
 
 export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
     return (
@@ -60,6 +61,10 @@ export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
                 <Route 
                     path="profile" 
                     element={isLoggedIn ? <div>Profile</div> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="viewBets/:gameId" 
+                    element={isLoggedIn ? <BetList /> : <Navigate to="/login" />} 
                 />
 
                 <Route path="*" element={<div>Nothing found...</div>} />

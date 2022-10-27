@@ -83,6 +83,79 @@ namespace BetNFL.Repositories
             }
         }
 
+        public Game GetGameWithLiveBets(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT g.Id, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
+                            g.AwayTeamScore, g.KickoffTime, g.[Week], g.[Year],
+                            ht.LocationName AS HomeLocationName, ht.TeamName AS HomeTeamName, 
+                            ht.Abbreviation AS HomeAbbreviation, ht.LogoUrl AS HomeLogoUrl,
+                            awt.LocationName AS AwayLocationName, awt.TeamName AS AwayTeamName, 
+                            awt.Abbreviation AS AwayAbbreviation, awt.LogoUrl AS AwayLogoUrl,
+                            liveBet.Id AS BetId, liveBet.UserProfileId, liveBet.BetTypeId, liveBet.Line, 
+                            liveBet.AwayTeamOdds, liveBet.HomeTeamOdds, liveBet.CreateDateTime, liveBet.isLive,
+                            liveBet.Name, liveBet.Username
+                        FROM Game g
+                            LEFT JOIN Team ht ON ht.id = g.HomeTeamId
+                            LEFT JOIN Team awt ON awt.id = g.AwayTeamId
+                            LEFT JOIN (SELECT b.*, bt.Name, up.Username FROM Bet b
+                                LEFT JOIN BetType bt ON bt.Id = b.BetTypeId
+                                LEFT JOIN UserProfile up ON up.Id = b.UserProfileId
+                                WHERE b.IsLive = 1) liveBet ON liveBet.GameId = g.Id
+                            WHERE g.Id = @id
+                            ORDER BY liveBet.Username ASC
+                    ";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        Game game = null;
+
+                        while (reader.Read())
+                        {
+                            if (game == null)
+                            {
+                                game = readGame(reader);
+                            }
+
+                            var betId = DbUtils.GetNullableInt(reader, "BetId");
+                            if (betId != null)
+                            {
+                                var bet = new Bet()
+                                {
+                                    Id = (int)betId,
+                                    UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                                    GameId = DbUtils.GetInt(reader, "Id"),
+                                    Line = DbUtils.GetNullableInt(reader, "Line"),
+                                    AwayTeamOdds = DbUtils.GetInt(reader, "AwayTeamOdds"),
+                                    HomeTeamOdds = DbUtils.GetInt(reader, "HomeTeamOdds"),
+                                    CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
+                                    isLive = DbUtils.GetBoolean(reader, "IsLive"),
+                                    BetType = new BetType()
+                                    {
+                                        Id = DbUtils.GetInt(reader, "BetTypeId"),
+                                        Name = DbUtils.GetString(reader, "Name")
+                                    },
+                                    UserProfile = new UserProfile()
+                                    {
+                                        Username = DbUtils.GetString(reader, "Username")
+                                    }
+                                };
+                                game.LiveBets.Add(bet);
+                            }
+                        }
+
+                        return game;
+                    }
+                }
+            }
+        }
+
         public void PostGame(Game game)
         {
             using (var conn = Connection)
@@ -171,7 +244,8 @@ namespace BetNFL.Repositories
                     TeamName = DbUtils.GetString(reader, "HomeTeamName"),
                     Abbreviation = DbUtils.GetString(reader, "HomeAbbreviation"),
                     LogoUrl = DbUtils.GetString(reader, "HomeLogoUrl")
-                }
+                },
+                LiveBets = new List<Bet>()
             };
 
             return game;
