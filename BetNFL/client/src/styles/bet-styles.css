@@ -1,0 +1,14 @@
+.bet-header {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 1px;
+}
+
+.odds-text {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 7px;
+}

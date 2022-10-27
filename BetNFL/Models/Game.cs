@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BetNFL.Models
 {
@@ -14,5 +15,6 @@ namespace BetNFL.Models
         public int Year { get; set; }
         public Team HomeTeam { get; set; }
         public Team AwayTeam { get; set; }
+        public List<Bet> LiveBets { get; set; }
     }
 }

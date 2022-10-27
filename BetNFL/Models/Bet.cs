@@ -13,5 +13,7 @@ namespace BetNFL.Models
         public int HomeTeamOdds { get; set; }
         public DateTime CreateDateTime { get; set; }
         public bool isLive { get; set; }
+        public BetType BetType { get; set; }
+        public UserProfile UserProfile {get; set;}
     }
 }
