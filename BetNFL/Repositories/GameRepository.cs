@@ -18,7 +18,7 @@ namespace BetNFL.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT g.Id, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
+                        SELECT g.Id GameId, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
                                g.AwayTeamScore, g.KickoffTime, g.[Week], g.[Year],
                                ht.LocationName AS HomeLocationName, ht.TeamName AS HomeTeamName, 
                                ht.Abbreviation AS HomeAbbreviation, ht.LogoUrl AS HomeLogoUrl,
@@ -38,7 +38,7 @@ namespace BetNFL.Repositories
 
                         while (reader.Read())
                         {
-                            Game game = readGame(reader);
+                            Game game = DbUtils.ReadGame(reader);
                             games.Add(game);
                         }
 
@@ -56,7 +56,7 @@ namespace BetNFL.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT g.Id, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
+                        SELECT g.Id GameId, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
                                g.AwayTeamScore, g.KickoffTime, g.[Week], g.[Year],
                                ht.LocationName AS HomeLocationName, ht.TeamName AS HomeTeamName, 
                                ht.Abbreviation AS HomeAbbreviation, ht.LogoUrl AS HomeLogoUrl,
@@ -73,7 +73,7 @@ namespace BetNFL.Repositories
                     {
                         if (reader.Read())
                         {
-                            Game game = readGame(reader);
+                            Game game = DbUtils.ReadGame(reader);
                             return game;
                         }
 
@@ -91,12 +91,12 @@ namespace BetNFL.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT g.Id, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
+                        SELECT g.Id GameId, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
                             g.AwayTeamScore, g.KickoffTime, g.[Week], g.[Year],
-                            ht.LocationName AS HomeLocationName, ht.TeamName AS HomeTeamName, 
-                            ht.Abbreviation AS HomeAbbreviation, ht.LogoUrl AS HomeLogoUrl,
-                            awt.LocationName AS AwayLocationName, awt.TeamName AS AwayTeamName, 
-                            awt.Abbreviation AS AwayAbbreviation, awt.LogoUrl AS AwayLogoUrl,
+                            ht.LocationName HomeLocationName, ht.TeamName HomeTeamName, 
+                            ht.Abbreviation HomeAbbreviation, ht.LogoUrl HomeLogoUrl,
+                            awt.LocationName AwayLocationName, awt.TeamName AwayTeamName, 
+                            awt.Abbreviation AwayAbbreviation, awt.LogoUrl AwayLogoUrl,
                             liveBet.Id AS BetId, liveBet.UserProfileId, liveBet.BetTypeId, liveBet.Line, 
                             liveBet.AwayTeamOdds, liveBet.HomeTeamOdds, liveBet.CreateDateTime, liveBet.isLive,
                             liveBet.Name, liveBet.Username
@@ -120,32 +120,12 @@ namespace BetNFL.Repositories
                         {
                             if (game == null)
                             {
-                                game = readGame(reader);
+                                game = DbUtils.ReadGame(reader);
                             }
 
-                            var betId = DbUtils.GetNullableInt(reader, "BetId");
-                            if (betId != null)
+                            if (!reader.IsDBNull(reader.GetOrdinal("BetId")))
                             {
-                                var bet = new Bet()
-                                {
-                                    Id = (int)betId,
-                                    UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
-                                    GameId = DbUtils.GetInt(reader, "Id"),
-                                    Line = DbUtils.GetNullableInt(reader, "Line"),
-                                    AwayTeamOdds = DbUtils.GetInt(reader, "AwayTeamOdds"),
-                                    HomeTeamOdds = DbUtils.GetInt(reader, "HomeTeamOdds"),
-                                    CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
-                                    isLive = DbUtils.GetBoolean(reader, "IsLive"),
-                                    BetType = new BetType()
-                                    {
-                                        Id = DbUtils.GetInt(reader, "BetTypeId"),
-                                        Name = DbUtils.GetString(reader, "Name")
-                                    },
-                                    UserProfile = new UserProfile()
-                                    {
-                                        Username = DbUtils.GetString(reader, "Username")
-                                    }
-                                };
+                                var bet = DbUtils.ReadBet(reader);
                                 game.LiveBets.Add(bet);
                             }
                         }
@@ -215,40 +195,6 @@ namespace BetNFL.Repositories
                     cmd.ExecuteNonQuery();
                 }
             }
-        }
-
-        private Game readGame(SqlDataReader reader)
-        {
-            Game game = new Game()
-            {
-                Id = DbUtils.GetInt(reader, "Id"),
-                AwayTeamId = DbUtils.GetInt(reader, "AwayTeamId"),
-                HomeTeamId = DbUtils.GetInt(reader, "HomeTeamId"),
-                AwayTeamScore = DbUtils.GetNullableInt(reader, "AwayTeamScore"),
-                HomeTeamScore = DbUtils.GetNullableInt(reader, "HomeTeamScore"),
-                KickoffTime = DbUtils.GetDateTime(reader, "KickoffTime"),
-                Week = DbUtils.GetInt(reader, "Week"),
-                Year = DbUtils.GetInt(reader, "Year"),
-                AwayTeam = new Team()
-                {
-                    Id = DbUtils.GetInt(reader, "AwayTeamId"),
-                    LocationName = DbUtils.GetString(reader, "AwayLocationName"),
-                    TeamName = DbUtils.GetString(reader, "AwayTeamName"),
-                    Abbreviation = DbUtils.GetString(reader, "AwayAbbreviation"),
-                    LogoUrl = DbUtils.GetString(reader, "AwayLogoUrl")
-                },
-                HomeTeam = new Team()
-                {
-                    Id = DbUtils.GetInt(reader, "HomeTeamId"),
-                    LocationName = DbUtils.GetString(reader, "HomeLocationName"),
-                    TeamName = DbUtils.GetString(reader, "HomeTeamName"),
-                    Abbreviation = DbUtils.GetString(reader, "HomeAbbreviation"),
-                    LogoUrl = DbUtils.GetString(reader, "HomeLogoUrl")
-                },
-                LiveBets = new List<Bet>()
-            };
-
-            return game;
         }
     }
 }

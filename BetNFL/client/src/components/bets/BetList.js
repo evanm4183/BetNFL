@@ -21,7 +21,7 @@ export default function BetList() {
                 {
                     game?.liveBets?.map((bet) => 
                         <BetCard 
-                            key={game.id} 
+                            key={bet.id} 
                             game={game} 
                             bet={bet}
                         />

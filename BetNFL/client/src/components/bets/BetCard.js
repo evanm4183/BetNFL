@@ -13,7 +13,7 @@ export default function BetCard({game, bet}) {
     }
 
     const handleClick = () => {
-        console.log("clicked");
+        navigate(`/placeBet/${bet.id}`);
     }
 
     return (

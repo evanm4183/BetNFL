@@ -1,5 +1,7 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using BetNFL.Models;
+using Microsoft.Data.SqlClient;
 using System;
+using System.Collections.Generic;
 
 namespace BetNFL.Utils
 {
@@ -69,6 +71,70 @@ namespace BetNFL.Utils
 
             cmd.Parameters.AddWithValue(column, value);
             return;
+        }
+
+
+        // Must alias Game.Id as "GameId"
+        public static Game ReadGame(SqlDataReader reader)
+        {
+            Game game = new Game()
+            {
+                Id = GetInt(reader, "GameId"),
+                AwayTeamId = GetInt(reader, "AwayTeamId"),
+                HomeTeamId = GetInt(reader, "HomeTeamId"),
+                AwayTeamScore = GetNullableInt(reader, "AwayTeamScore"),
+                HomeTeamScore = GetNullableInt(reader, "HomeTeamScore"),
+                KickoffTime = GetDateTime(reader, "KickoffTime"),
+                Week = GetInt(reader, "Week"),
+                Year = GetInt(reader, "Year"),
+                AwayTeam = new Team()
+                {
+                    Id = GetInt(reader, "AwayTeamId"),
+                    LocationName = GetString(reader, "AwayLocationName"),
+                    TeamName = GetString(reader, "AwayTeamName"),
+                    Abbreviation = GetString(reader, "AwayAbbreviation"),
+                    LogoUrl = GetString(reader, "AwayLogoUrl")
+                },
+                HomeTeam = new Team()
+                {
+                    Id = GetInt(reader, "HomeTeamId"),
+                    LocationName = GetString(reader, "HomeLocationName"),
+                    TeamName = GetString(reader, "HomeTeamName"),
+                    Abbreviation = GetString(reader, "HomeAbbreviation"),
+                    LogoUrl = GetString(reader, "HomeLogoUrl")
+                },
+                LiveBets = new List<Bet>()
+            };
+
+            return game;
+        }
+
+        // Must alias Bet.Id as "BetId"
+        public static Bet ReadBet(SqlDataReader reader)
+        {
+            var bet = new Bet()
+            {
+                Id = GetInt(reader, "BetId"),
+                UserProfileId = GetInt(reader, "UserProfileId"),
+                GameId = GetInt(reader, "GameId"),
+                Line = GetNullableInt(reader, "Line"),
+                AwayTeamOdds = GetInt(reader, "AwayTeamOdds"),
+                HomeTeamOdds = GetInt(reader, "HomeTeamOdds"),
+                CreateDateTime = GetDateTime(reader, "CreateDateTime"),
+                isLive = GetBoolean(reader, "IsLive"),
+                BetType = new BetType()
+                {
+                    Id = GetInt(reader, "BetTypeId"),
+                    Name = GetString(reader, "Name")
+                },
+                UserProfile = new UserProfile()
+                {
+                    Username = GetString(reader, "Username")
+                },
+                Game = new Game()
+            };
+
+            return bet;
         }
     }
 }

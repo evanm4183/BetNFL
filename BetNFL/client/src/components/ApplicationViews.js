@@ -7,6 +7,7 @@ import GameList from "./games/GameList";
 import GameEditForm from "./games/GameEditForm";
 import BetPropertiesForm from "./bets/BetPropertiesForm";
 import BetList from "./bets/BetList";
+import PlaceBetForm from "./bets/PlaceBetForm";
 
 export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
     return (
@@ -65,6 +66,10 @@ export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
                 <Route 
                     path="viewBets/:gameId" 
                     element={isLoggedIn ? <BetList /> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="placeBet/:betId" 
+                    element={isLoggedIn ? <PlaceBetForm /> : <Navigate to="/login" />} 
                 />
 
                 <Route path="*" element={<div>Nothing found...</div>} />

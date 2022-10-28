@@ -7,7 +7,7 @@ using BetNFL.Utils;
 
 namespace BetNFL.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BetController : ControllerBase
@@ -27,6 +27,12 @@ namespace BetNFL.Controllers
             var currentUser = AuthUtils.GetCurrentUserProfile(User, _userProfileRepo);
 
             return Ok(_betRepo.GetLiveBetForGame(currentUser.Id, gameId));
+        }
+
+        [HttpGet("GetById/{betId}")]
+        public IActionResult GetBetById(int betId)
+        {
+            return Ok(_betRepo.GetBetById(betId));
         }
 
         [HttpPost]

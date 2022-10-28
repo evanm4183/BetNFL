@@ -47,7 +47,51 @@ namespace BetNFL.Repositories
                 }
             }
         }
+        
+        public Bet GetBetById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT b.Id BetId, b.UserProfileId, b.BetTypeId, b.Line, 
+                               b.AwayTeamOdds, b.HomeTeamOdds, b.CreateDateTime, b.isLive,
+                               g.Id GameId, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
+                               g.AwayTeamScore, g.KickoffTime, g.[Week], g.[Year],
+                               awt.LocationName AwayLocationName, awt.TeamName AwayTeamName, 
+                               awt.Abbreviation AwayAbbreviation, awt.LogoUrl AwayLogoUrl,
+                               ht.LocationName HomeLocationName, ht.TeamName HomeTeamName, 
+                               ht.Abbreviation HomeAbbreviation, ht.LogoUrl HomeLogoUrl,
+                               up.Username, bt.Name
+                        FROM Bet b
+                            LEFT JOIN Game g ON g.Id = b.GameId
+                            LEFT JOIN Team ht ON ht.id = g.HomeTeamId
+                            LEFT JOIN Team awt ON awt.id = g.AwayTeamId
+                            LEFT JOIN UserProfile up ON up.Id = b.UserProfileId
+                            LEFT JOIN BetType bt ON bt.Id = b.BetTypeId
+                        WHERE B.Id = @betId
+                    ";
+                    cmd.Parameters.AddWithValue("@betId", id);
 
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            Bet bet = DbUtils.ReadBet(reader);
+                            bet.Game = DbUtils.ReadGame(reader);
+
+                            return bet;
+                        }
+
+                        return null;
+                    }
+                }
+            }
+        }
+        
         public void PostBet(Bet bet)
         {
             using (var conn = Connection)
