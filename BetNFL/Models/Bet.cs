@@ -15,5 +15,6 @@ namespace BetNFL.Models
         public bool isLive { get; set; }
         public BetType BetType { get; set; }
         public UserProfile UserProfile {get; set;}
+        public Game Game { get; set;}
     }
 }

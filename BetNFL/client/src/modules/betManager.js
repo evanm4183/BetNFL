@@ -19,6 +19,19 @@ export const getLiveBetForGame = (gameId) => {
     });
 }
 
+export const getBetById = (betId) => {
+    return getToken().then((token) => {
+        return fetch(`${apiUrl}/getById/${betId}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        }).then((res) => {
+            return res.json();
+        });
+    });
+}
+
 export const postBet = (bet) => {
     return getToken().then((token) => {
         return fetch(apiUrl, {
