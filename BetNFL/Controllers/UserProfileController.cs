@@ -17,6 +17,12 @@ namespace BetNFL.Controllers
             _userProfileRepo = userProfileRepo;
         }
 
+        [HttpGet]
+        public IActionResult GetCurrentUser()
+        {
+            return Ok(AuthUtils.GetCurrentUserProfile(User, _userProfileRepo));
+        }
+
         [HttpGet("DoesUserExist/{firebaseUserId}")]
         public IActionResult DoesUserExist(string firebaseUserId)
         {
