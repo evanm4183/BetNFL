@@ -19,6 +19,13 @@ namespace BetNFL.Controllers
             _userProfileRepo = userProfileRepo;
         }
 
+        [HttpGet]
+        public IActionResult GetMyOpenBets()
+        {
+            var currentUser = AuthUtils.GetCurrentUserProfile(User, _userProfileRepo);
+            return Ok(_upBetRepo.GetMyOpenBets(currentUser.Id));
+        }
+
         [HttpPost]
         public IActionResult PostUserProfileBet(UserProfileBet upBet)
         {
