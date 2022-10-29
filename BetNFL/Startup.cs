@@ -35,6 +35,7 @@ namespace BetNFL
             services.AddTransient<IGameRepository, GameRepository>();
             services.AddTransient<IBetRepository, BetRepository>();
             services.AddTransient<IUserProfileBetRepository, UserProfileBetRepository>();
+            services.AddTransient<IUserTypeRepository, UserTypeRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

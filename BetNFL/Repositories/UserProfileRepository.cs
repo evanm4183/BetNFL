@@ -51,5 +51,34 @@ namespace BetNFL.Repositories
                 }
             }
         }
+
+        public void RegisterNewUser(UserProfile userProfile)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO UserProfile
+                        (
+                            UserTypeId, Email, Username, FirebaseUserId,
+                            AvailableFunds, IsApproved
+                        )
+                        VALUES
+                        (
+                            @userTypeId, @email, @username, 
+                            @firebaseUserId, 0, 1
+                        )
+                    ";
+                    cmd.Parameters.AddWithValue("@userTypeId", userProfile.UserTypeId);
+                    cmd.Parameters.AddWithValue("@email", userProfile.Email);
+                    cmd.Parameters.AddWithValue("@username", userProfile.Username);
+                    cmd.Parameters.AddWithValue("@firebaseUserId", userProfile.FirebaseUserId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

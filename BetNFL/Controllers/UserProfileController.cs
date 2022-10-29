@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using BetNFL.Models;
 using BetNFL.Repositories;
 using BetNFL.Utils;
 
 namespace BetNFL.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserProfileController : ControllerBase
@@ -26,6 +26,13 @@ namespace BetNFL.Controllers
                 return NotFound();
             }
             return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult RegisterNewUser(UserProfile userProfile)
+        {
+            _userProfileRepo.RegisterNewUser(userProfile);
+            return NoContent();
         }
 
         [HttpGet("IsAdmin")]

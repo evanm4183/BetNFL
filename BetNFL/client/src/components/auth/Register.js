@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
 import { register } from "../../modules/authManager";
+import { getPublicUserTypes } from "../../modules/userTypeManager";
 
 export default function Register() {
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [displayName, setDisplayName] = useState();
+  const [username, setUsername] = useState();
   const [email, setEmail] = useState();
-  const [imageLocation, setImageLocation] = useState();
+  const [userType, setUserType] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
+  const [userTypes, setUserTypes] = useState();
 
   const registerClick = (e) => {
     e.preventDefault();
@@ -20,41 +20,29 @@ export default function Register() {
       alert("Passwords don't match. Do better.");
     } else {
       const userProfile = {
-        firstName,
-        lastName,
-        displayName,
-        imageLocation,
+        username,
+        userType,
         email,
       };
       register(userProfile, password).then(() => navigate("/"));
     }
   };
 
+  useEffect(() => {
+    getPublicUserTypes().then((userTypes) => {
+      setUserTypes(userTypes);
+    });
+  }, []);
+
   return (
     <Form onSubmit={registerClick}>
       <fieldset>
         <FormGroup>
-          <Label htmlFor="firstName">First Name</Label>
+          <Label htmlFor="username">Username</Label>
           <Input
-            id="firstName"
+            id="username"
             type="text"
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input
-            id="lastName"
-            type="text"
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="displayName">Display Name</Label>
-          <Input
-            id="displayName"
-            type="text"
-            onChange={(e) => setDisplayName(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </FormGroup>
         <FormGroup>
@@ -66,12 +54,23 @@ export default function Register() {
           />
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="imageLocation">Profile Image URL</Label>
-          <Input
-            id="imageLocation"
-            type="text"
-            onChange={(e) => setImageLocation(e.target.value)}
-          />
+        <Label for="userType">Account Type</Label>
+          <Input 
+            type="select" 
+            name="userType" 
+            id="user-type" 
+            onChange={(e) => {setUserType(parseInt(e.target.value))}}
+          >
+            <option id="team--0">Select a Type...</option>
+            {
+                userTypes?.map((type) => {
+                    return <option 
+                        key={`type--${type.id}`}
+                        value={type.id}
+                    >{type.name}</option>
+                })
+            }
+          </Input>
         </FormGroup>
         <FormGroup>
           <Label for="password">Password</Label>
