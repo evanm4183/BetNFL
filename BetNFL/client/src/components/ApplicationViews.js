@@ -9,6 +9,7 @@ import BetPropertiesForm from "./bets/BetPropertiesForm";
 import BetList from "./bets/BetList";
 import PlaceBetForm from "./bets/PlaceBetForm";
 import OpenBetsList from "./bets/OpenBetsList";
+import ProfilePage from "./userProfile/ProfilePage";
 
 export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
     return (
@@ -62,7 +63,7 @@ export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
                 />
                 <Route 
                     path="profile" 
-                    element={isLoggedIn ? <div>Profile</div> : <Navigate to="/login" />} 
+                    element={isLoggedIn ? <ProfilePage /> : <Navigate to="/login" />} 
                 />
                 <Route 
                     path="viewBets/:gameId" 
