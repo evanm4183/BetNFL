@@ -23,3 +23,25 @@
     justify-content: space-around;
     margin-bottom: 20px;
 }
+
+/*
+    Open Bets Styles
+*/
+.open-bets-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1.5%;
+}
+
+.open-bet-card {
+    border: solid navy 1px;
+    border-radius: 5px;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2%;
+    padding-left: 4px;
+    padding-right: 4px;
+}
