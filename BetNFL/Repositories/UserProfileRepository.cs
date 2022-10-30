@@ -51,5 +51,25 @@ namespace BetNFL.Repositories
                 }
             }
         }
+
+        public void AddFunds(UserProfile userProfile)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE UserProfile
+                        SET AvailableFunds = @availableFunds
+                        WHERE Id = @id
+                    ";
+                    cmd.Parameters.AddWithValue("@id", userProfile.Id);
+                    cmd.Parameters.AddWithValue("@availableFunds", userProfile.AvailableFunds);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

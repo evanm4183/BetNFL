@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
 import { Form, FormGroup, Input, Button, Label } from "reactstrap";
-import { getCurrentUser } from "../../modules/userProfileManager";
+import { getCurrentUser, addFunds } from "../../modules/userProfileManager";
 
 export default function ProfilePage() {
     const [currentUser, setCurrentUser] = useState();
+    const [userObjForPost, setUserObjForPost] = useState();
 
-    useEffect(() => {
+    const getAndSetCurrentUser = () => {
         getCurrentUser().then((user) => {
             setCurrentUser(user);
+            setUserObjForPost(user);
         });
+    }
+
+    useEffect(() => {
+        getAndSetCurrentUser();
     }, []);
 
     return (
@@ -35,9 +41,21 @@ export default function ProfilePage() {
                             <Input 
                                 type="number" 
                                 name="addFunds" 
-                                placeholder="$0.00" 
+                                placeholder="$0.00"
+                                onChange={(e) => {
+                                    const copy = {...userObjForPost}
+                                    copy.availableFunds = currentUser.availableFunds + parseFloat(e.target.value);
+                                    setUserObjForPost(copy);
+                                }}
                             />
-                            <Button style={{marginTop: "10px"}}>Process Transaction</Button>
+                            <Button 
+                                style={{marginTop: "10px"}}
+                                onClick={() => {
+                                    addFunds(userObjForPost).then(getAndSetCurrentUser);
+                                }}
+                            >
+                                Process Transaction
+                            </Button>
                         </FormGroup>
                     </Form>
                 </div>
