@@ -84,6 +84,9 @@ export default function PlaceBetForm() {
                         } else if (userProfileBet.betAmount >= 10000000) {
                             window.alert("Error: Maximum bet amount exceeded");
                             return;
+                        } else if (userProfileBet.betAmount < 1) {
+                            window.alert("Error: Minimum bet amount is $1.00");
+                            return;
                         }
                         
                         postUserProfileBet(userProfileBet).then(() => navigate("/openBets"))

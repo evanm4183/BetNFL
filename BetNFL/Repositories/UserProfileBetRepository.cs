@@ -85,7 +85,11 @@ namespace BetNFL.Repositories
                         (
                             @userProfileId, @betId, NULL, @side, 
                             @betAmount, GETDATE(), NULL
-                        )
+                        );
+
+                        UPDATE UserProfile 
+                        SET AvailableFunds = AvailableFunds - @betAmount
+                        WHERE Id = @userProfileId
                     ";
                     cmd.Parameters.AddWithValue("@userProfileId", upBet.UserProfileId);
                     cmd.Parameters.AddWithValue("@betId", upBet.BetId);
