@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using BetNFL.Models;
 using BetNFL.Repositories;
 using BetNFL.Utils;
 
@@ -32,6 +33,13 @@ namespace BetNFL.Controllers
                 return NotFound();
             }
             return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult AddFunds(UserProfile userProfile)
+        {
+            _userProfileRepo.AddFunds(userProfile);
+            return NoContent();
         }
 
         [HttpGet("IsAdmin")]
