@@ -15,6 +15,19 @@ export const getGamesByWeek = (week) => {
     });
 }
 
+export const getGamesWithOpenBets = () => {
+    return getToken().then((token) => {
+        return fetch(`${apiUrl}/GamesWithOpenBets`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        }).then((res) => {
+            return res.json();
+        });
+    });
+}
+
 export const getGameById = (id) => {
     return getToken().then((token) => {
         return fetch(`${apiUrl}/${id}`, {
