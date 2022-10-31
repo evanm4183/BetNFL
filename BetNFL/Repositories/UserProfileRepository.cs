@@ -71,7 +71,7 @@ namespace BetNFL.Repositories
                             @firebaseUserId, 0, 1
                         )
                     ";
-                    cmd.Parameters.AddWithValue("@userTypeId", userProfile.UserTypeId);
+                    cmd.Parameters.AddWithValue("@userTypeId", userProfile.UserType.Id);
                     cmd.Parameters.AddWithValue("@email", userProfile.Email);
                     cmd.Parameters.AddWithValue("@username", userProfile.Username);
                     cmd.Parameters.AddWithValue("@firebaseUserId", userProfile.FirebaseUserId);

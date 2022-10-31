@@ -21,7 +21,7 @@ export default function Register() {
     } else {
       const userProfile = {
         username,
-        userType,
+        userType: {id: userType},
         email,
       };
       register(userProfile, password).then(() => navigate("/"));
