@@ -128,108 +128,81 @@ namespace BetNFL.Repositories
                     if (awayTeamScore > homeTeamScore)
                     {
                         cmd.CommandText = @"
-                            UPDATE allInfo
-                            SET 
-	                            BettorAvailableFunds = 
-	                                CASE
-		                                WHEN AwayTeamOdds > 0 THEN BettorAvailableFunds + BetAmount + (BetAmount * (AwayTeamOdds / 100.0))
-		                                WHEN AwayTeamOdds < 0 THEN BettorAvailableFunds + BetAmount + (BetAmount * (100.0 / -AwayTeamOdds))
-	                                END
-                            FROM
-	                            (
-		                            SELECT 
-			                            upb.Id AS UserProfileBetId,
-			                            upb.Side,
-			                            upb.BetAmount,
-			                            b.AwayTeamOdds,
-			                            b.HomeTeamOdds,
-			                            g.Id AS GameId,
-			                            g.AwayTeamScore,
-			                            g.HomeTeamScore,
-			                            bp.Id AS BettorId,
-			                            bp.Username AS BettorName,
-			                            bp.AvailableFunds AS BettorAvailableFunds,
-			                            sbp.Id AS SportsbookId,
-			                            sbp.Username AS SportsbookName,
-			                            sbp.AvailableFunds AS SportsbookAvailableFunds,
-			                            upb.WinnerId,
-			                            upb.ProcessedDateTime
-		                            FROM UserProfileBet upb
-			                            LEFT JOIN Bet b ON b.Id = upb.BetId
-			                            LEFT JOIN Game g ON g.Id = b.GameId
-			                            LEFT JOIN UserProfile bp ON bp.Id = upb.UserProfileId
-			                            LEFT JOIN UserProfile sbp ON sbp.Id = b.UserProfileId
-		                            WHERE g.Id = @gameId AND upb.ProcessedDateTime IS NULL				
-	                            ) allInfo
-                            WHERE Side = 1;
+                            /* Add winnings to the accounts of the bettors that won */
+
+                            UPDATE up
+							SET up.AvailableFunds = up.AvailableFunds + upEarnings.Winnings
+							FROM UserProfile up
+								JOIN 
+								(
+									SELECT 
+										upb.UserProfileId,
+										SUM(
+											CASE
+												WHEN AwayTeamOdds > 0 THEN BetAmount + (BetAmount * (AwayTeamOdds / 100.0))
+												WHEN AwayTeamOdds < 0 THEN BetAmount + (BetAmount * (100.0 / -AwayTeamOdds))
+											END
+										) AS Winnings
+									FROM UserProfileBet upb
+										LEFT JOIN Bet b ON b.Id = upb.BetId
+									WHERE b.GameId = @gameId 
+                                        AND Side = 1 
+                                        AND upb.ProcessedDateTime IS NULL
+									GROUP BY upb.UserProfileId
+								) upEarnings ON upEarnings.UserProfileId = up.Id;
 
 
-                            UPDATE allInfo
-                            SET 
-	                            SportsbookAvailableFunds = 
-	                                CASE
-		                                WHEN AwayTeamOdds > 0 THEN SportsbookAvailableFunds - (BetAmount * (AwayTeamOdds / 100.0))
-		                                WHEN AwayTeamOdds < 0 THEN SportsbookAvailableFunds - (BetAmount * (100.0 / -AwayTeamOdds))
-	                                END
-                            FROM
-	                            (
-		                            SELECT 
-			                            upb.Id AS UserProfileBetId,
-			                            upb.Side,
-			                            upb.BetAmount,
-			                            b.AwayTeamOdds,
-			                            b.HomeTeamOdds,
-			                            g.Id AS GameId,
-			                            g.AwayTeamScore,
-			                            g.HomeTeamScore,
-			                            bp.Id AS BettorId,
-			                            bp.Username AS BettorName,
-			                            bp.AvailableFunds AS BettorAvailableFunds,
-			                            sbp.Id AS SportsbookId,
-			                            sbp.Username AS SportsbookName,
-			                            sbp.AvailableFunds AS SportsbookAvailableFunds,
-			                            upb.WinnerId,
-			                            upb.ProcessedDateTime
-		                            FROM UserProfileBet upb
-			                            LEFT JOIN Bet b ON b.Id = upb.BetId
-			                            LEFT JOIN Game g ON g.Id = b.GameId
-			                            LEFT JOIN UserProfile bp ON bp.Id = upb.UserProfileId
-			                            LEFT JOIN UserProfile sbp ON sbp.Id = b.UserProfileId
-		                            WHERE g.Id = @gameId AND upb.ProcessedDateTime IS NULL				
-	                            ) allInfo
-                            WHERE Side = 1;
+							/* Subtract losses from the accounts of the sportsbooks that lost */
+
+                            UPDATE up
+							SET up.AvailableFunds = up.AvailableFunds - upEarnings.Losses
+							FROM UserProfile up
+								JOIN 
+								(
+									SELECT 
+										b.UserProfileId,
+										SUM(
+											CASE
+												WHEN AwayTeamOdds > 0 THEN (BetAmount * (AwayTeamOdds / 100.0))
+												WHEN AwayTeamOdds < 0 THEN (BetAmount * (100.0 / -AwayTeamOdds))
+											END
+										) AS Losses
+									FROM UserProfileBet upb
+										LEFT JOIN Bet b ON b.Id = upb.BetId
+									WHERE b.GameId = @gameId 
+                                        AND Side = 1 
+                                        AND upb.ProcessedDateTime IS NULL
+									GROUP BY b.UserProfileId
+								) upEarnings ON upEarnings.UserProfileId = up.Id;
 
 
-                            UPDATE allInfo
-                            SET 
-	                            SportsbookAvailableFunds = SportsbookAvailableFunds + BetAmount
-                            FROM
-	                            (
-		                            SELECT 
-			                            upb.Id AS UserProfileBetId,
-			                            upb.Side,
-			                            upb.BetAmount,
-			                            b.AwayTeamOdds,
-			                            b.HomeTeamOdds,
-			                            g.Id AS GameId,
-			                            g.AwayTeamScore,
-			                            g.HomeTeamScore,
-			                            bp.Id AS BettorId,
-			                            bp.Username AS BettorName,
-			                            bp.AvailableFunds AS BettorAvailableFunds,
-			                            sbp.Id AS SportsbookId,
-			                            sbp.Username AS SportsbookName,
-			                            sbp.AvailableFunds AS SportsbookAvailableFunds,
-			                            upb.WinnerId,
-			                            upb.ProcessedDateTime
-		                            FROM UserProfileBet upb
-			                            LEFT JOIN Bet b ON b.Id = upb.BetId
-			                            LEFT JOIN Game g ON g.Id = b.GameId
-			                            LEFT JOIN UserProfile bp ON bp.Id = upb.UserProfileId
-			                            LEFT JOIN UserProfile sbp ON sbp.Id = b.UserProfileId
-		                            WHERE g.Id = @gameId AND upb.ProcessedDateTime IS NULL				
-	                            ) allInfo
-                            WHERE Side = 2;
+                            /* Add winnings to the sportsbooks that won */
+
+                            UPDATE up
+							SET up.AvailableFunds = up.AvailableFunds + upEarnings.Winnings
+							FROM UserProfile up
+								JOIN 
+								(
+									SELECT 
+										b.UserProfileId,
+										SUM(BetAmount) AS Winnings
+									FROM UserProfileBet upb
+										LEFT JOIN Bet b ON b.Id = upb.BetId
+									WHERE b.GameId = @gameId 
+                                        AND Side = 2 
+                                        AND upb.ProcessedDateTime IS NULL
+									GROUP BY b.UserProfileId
+								) upEarnings ON upEarnings.UserProfileId = up.Id;
+
+
+                            /* Marks all open bets as processed */
+
+                            UPDATE upb
+                            SET upb.ProcessedDateTime = GETDATE()
+                            FROM UserProfileBet upb
+	                            LEFT JOIN Bet b ON b.Id = upb.BetId
+                            WHERE GameId = @gameId
+	                            AND upb.ProcessedDateTime IS NULL
                         ";
 
                         cmd.ExecuteNonQuery();
@@ -237,108 +210,81 @@ namespace BetNFL.Repositories
                     else if (awayTeamScore < homeTeamScore)
                     {
                         cmd.CommandText = @"
-                            UPDATE allInfo
-                            SET 
-	                            BettorAvailableFunds = 
-	                                CASE
-		                                WHEN HomeTeamOdds > 0 THEN BettorAvailableFunds + BetAmount + (BetAmount * (HomeTeamOdds / 100.0))
-		                                WHEN HomeTeamOdds < 0 THEN BettorAvailableFunds + BetAmount + (BetAmount * (100.0 / -HomeTeamOdds))
-	                                END
-                            FROM
-	                            (
-		                            SELECT 
-			                            upb.Id AS UserProfileBetId,
-			                            upb.Side,
-			                            upb.BetAmount,
-			                            b.AwayTeamOdds,
-			                            b.HomeTeamOdds,
-			                            g.Id AS GameId,
-			                            g.AwayTeamScore,
-			                            g.HomeTeamScore,
-			                            bp.Id AS BettorId,
-			                            bp.Username AS BettorName,
-			                            bp.AvailableFunds AS BettorAvailableFunds,
-			                            sbp.Id AS SportsbookId,
-			                            sbp.Username AS SportsbookName,
-			                            sbp.AvailableFunds AS SportsbookAvailableFunds,
-			                            upb.WinnerId,
-			                            upb.ProcessedDateTime
-		                            FROM UserProfileBet upb
-			                            LEFT JOIN Bet b ON b.Id = upb.BetId
-			                            LEFT JOIN Game g ON g.Id = b.GameId
-			                            LEFT JOIN UserProfile bp ON bp.Id = upb.UserProfileId
-			                            LEFT JOIN UserProfile sbp ON sbp.Id = b.UserProfileId
-		                            WHERE g.Id = @gameId AND upb.ProcessedDateTime IS NULL AND Side = 2			
-	                            ) allInfo
+							/* Add winnings to the accounts of the bettors that won */
+
+                            UPDATE up
+							SET up.AvailableFunds = up.AvailableFunds + upEarnings.Winnings
+							FROM UserProfile up
+								JOIN 
+								(
+									SELECT 
+										upb.UserProfileId,
+										SUM(
+											CASE
+												WHEN HomeTeamOdds > 0 THEN BetAmount + (BetAmount * (HomeTeamOdds / 100.0))
+												WHEN HomeTeamOdds < 0 THEN BetAmount + (BetAmount * (100.0 / -HomeTeamOdds))
+											END
+										) AS Winnings
+									FROM UserProfileBet upb
+										LEFT JOIN Bet b ON b.Id = upb.BetId
+									WHERE b.GameId = @gameId 
+                                        AND Side = 2 
+                                        AND upb.ProcessedDateTime IS NULL
+									GROUP BY upb.UserProfileId
+								) upEarnings ON upEarnings.UserProfileId = up.Id;
 
 
+							/* Subtract losses from the accounts of the sportsbooks that lost */
 
-							UPDATE allInfo
-                            SET 
-	                            SportsbookAvailableFunds = 
-	                                CASE
-		                                WHEN HomeTeamOdds > 0 THEN SportsbookAvailableFunds - (BetAmount * (HomeTeamOdds / 100.0))
-		                                WHEN HomeTeamOdds < 0 THEN SportsbookAvailableFunds - (BetAmount * (100.0 / -HomeTeamOdds))
-	                                END
-                            FROM
-	                            (
-		                            SELECT 
-			                            upb.Id AS UserProfileBetId,
-			                            upb.Side,
-			                            upb.BetAmount,
-			                            b.AwayTeamOdds,
-			                            b.HomeTeamOdds,
-			                            g.Id AS GameId,
-			                            g.AwayTeamScore,
-			                            g.HomeTeamScore,
-			                            bp.Id AS BettorId,
-			                            bp.Username AS BettorName,
-			                            bp.AvailableFunds AS BettorAvailableFunds,
-			                            sbp.Id AS SportsbookId,
-			                            sbp.Username AS SportsbookName,
-			                            sbp.AvailableFunds AS SportsbookAvailableFunds,
-			                            upb.WinnerId,
-			                            upb.ProcessedDateTime
-		                            FROM UserProfileBet upb
-			                            LEFT JOIN Bet b ON b.Id = upb.BetId
-			                            LEFT JOIN Game g ON g.Id = b.GameId
-			                            LEFT JOIN UserProfile bp ON bp.Id = upb.UserProfileId
-			                            LEFT JOIN UserProfile sbp ON sbp.Id = b.UserProfileId
-		                            WHERE g.Id = @gameId AND upb.ProcessedDateTime IS NULL				
-	                            ) allInfo
-                            WHERE Side = 2;
+                            UPDATE up
+							SET up.AvailableFunds = up.AvailableFunds - upEarnings.Losses
+							FROM UserProfile up
+								JOIN 
+								(
+									SELECT 
+										b.UserProfileId,
+										SUM(
+											CASE
+												WHEN HomeTeamOdds > 0 THEN (BetAmount * (HomeTeamOdds / 100.0))
+												WHEN HomeTeamOdds < 0 THEN (BetAmount * (100.0 / -HomeTeamOdds))
+											END
+										) AS Losses
+									FROM UserProfileBet upb
+										LEFT JOIN Bet b ON b.Id = upb.BetId
+									WHERE b.GameId = @gameId 
+                                        AND Side = 2 
+                                        AND upb.ProcessedDateTime IS NULL
+									GROUP BY b.UserProfileId
+								) upEarnings ON upEarnings.UserProfileId = up.Id;
 
 
-                            UPDATE allInfo
-                            SET 
-	                            SportsbookAvailableFunds = SportsbookAvailableFunds + BetAmount
-                            FROM
-	                            (
-		                            SELECT 
-			                            upb.Id AS UserProfileBetId,
-			                            upb.Side,
-			                            upb.BetAmount,
-			                            b.AwayTeamOdds,
-			                            b.HomeTeamOdds,
-			                            g.Id AS GameId,
-			                            g.AwayTeamScore,
-			                            g.HomeTeamScore,
-			                            bp.Id AS BettorId,
-			                            bp.Username AS BettorName,
-			                            bp.AvailableFunds AS BettorAvailableFunds,
-			                            sbp.Id AS SportsbookId,
-			                            sbp.Username AS SportsbookName,
-			                            sbp.AvailableFunds AS SportsbookAvailableFunds,
-			                            upb.WinnerId,
-			                            upb.ProcessedDateTime
-		                            FROM UserProfileBet upb
-			                            LEFT JOIN Bet b ON b.Id = upb.BetId
-			                            LEFT JOIN Game g ON g.Id = b.GameId
-			                            LEFT JOIN UserProfile bp ON bp.Id = upb.UserProfileId
-			                            LEFT JOIN UserProfile sbp ON sbp.Id = b.UserProfileId
-		                            WHERE g.Id = @gameId AND upb.ProcessedDateTime IS NULL				
-	                            ) allInfo
-                            WHERE Side = 1
+                            /* Add winnings to the sportsbooks that won */
+
+                            UPDATE up
+							SET up.AvailableFunds = up.AvailableFunds + upEarnings.Winnings
+							FROM UserProfile up
+								JOIN 
+								(
+									SELECT 
+										b.UserProfileId,
+										SUM(BetAmount) AS Winnings
+									FROM UserProfileBet upb
+										LEFT JOIN Bet b ON b.Id = upb.BetId
+									WHERE b.GameId = @gameId 
+                                        AND Side = 1 
+                                        AND upb.ProcessedDateTime IS NULL
+									GROUP BY b.UserProfileId
+								) upEarnings ON upEarnings.UserProfileId = up.Id;
+
+
+                            /* Marks all open bets as processed */
+
+                            UPDATE upb
+                            SET upb.ProcessedDateTime = GETDATE()
+                            FROM UserProfileBet upb
+	                            LEFT JOIN Bet b ON b.Id = upb.BetId
+                            WHERE GameId = @gameId
+	                            AND upb.ProcessedDateTime IS NULL
                         ";
 
                         cmd.ExecuteNonQuery();
@@ -346,36 +292,27 @@ namespace BetNFL.Repositories
                     else
                     {
                         cmd.CommandText = @"
-                            UPDATE allInfo
-                            SET 
-	                            BettorAvailableFunds = BettorAvailableFunds + BetAmount
-                            FROM
-	                            (
-		                            SELECT 
-			                            upb.Id AS UserProfileBetId,
-			                            upb.Side,
-			                            upb.BetAmount,
-			                            b.AwayTeamOdds,
-			                            b.HomeTeamOdds,
-			                            g.Id AS GameId,
-			                            g.AwayTeamScore,
-			                            g.HomeTeamScore,
-			                            bp.Id AS BettorId,
-			                            bp.Username AS BettorName,
-			                            bp.AvailableFunds AS BettorAvailableFunds,
-			                            sbp.Id AS SportsbookId,
-			                            sbp.Username AS SportsbookName,
-			                            sbp.AvailableFunds AS SportsbookAvailableFunds,
-			                            upb.WinnerId,
-			                            upb.ProcessedDateTime
-		                            FROM UserProfileBet upb
-			                            LEFT JOIN Bet b ON b.Id = upb.BetId
-			                            LEFT JOIN Game g ON g.Id = b.GameId
-			                            LEFT JOIN UserProfile bp ON bp.Id = upb.UserProfileId
-			                            LEFT JOIN UserProfile sbp ON sbp.Id = b.UserProfileId
-		                            WHERE g.Id = @gameId AND upb.ProcessedDateTime IS NULL				
-	                            ) allInfo
-							WHERE Side = 1 OR Side = 2
+                            UPDATE up
+							SET up.AvailableFunds = upEarnings.Refund
+							FROM UserProfile up
+								JOIN 
+								(
+									SELECT upb.UserProfileId, SUM(BetAmount) AS Refund
+									FROM UserProfileBet upb
+										LEFT JOIN Bet b ON b.Id = upb.BetId
+									WHERE b.GameId = @gameId
+									GROUP BY upb.UserProfileId
+								) upEarnings ON upEarnings.UserProfileId = up.Id
+
+                
+                            /* Marks all open bets as processed */
+
+                            UPDATE upb
+                            SET upb.ProcessedDateTime = GETDATE()
+                            FROM UserProfileBet upb
+	                            LEFT JOIN Bet b ON b.Id = upb.BetId
+                            WHERE GameId = @gameId
+	                            AND upb.ProcessedDateTime IS NULL
                         ";
 
 						cmd.ExecuteNonQuery();
