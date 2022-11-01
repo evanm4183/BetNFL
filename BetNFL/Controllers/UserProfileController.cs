@@ -6,7 +6,6 @@ using BetNFL.Utils;
 
 namespace BetNFL.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserProfileController : ControllerBase
@@ -35,6 +34,13 @@ namespace BetNFL.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        public IActionResult RegisterNewUser(UserProfile userProfile)
+        {
+            _userProfileRepo.RegisterNewUser(userProfile);
+            return NoContent();
+        }
+        
         [HttpPut]
         public IActionResult AddFunds(UserProfile userProfile)
         {

@@ -15,22 +15,26 @@ function App() {
   useEffect(() => {
     onLoginStatusChange(setIsLoggedIn);
   }, []);
-
+  
   useEffect(() => {
-    getUserType()?.then((userType) => {
-      if (userType === "admin") {
-        setIsAdmin(true);
-        setIsSportsbook(false);
-      } else if (userType === "sportsbook") {
-        setIsSportsbook(true);
-        setIsAdmin(false);
-      } else {
-        setIsAdmin(false);
-        setIsSportsbook(false);
-      }
-    });
+    
+    if (isLoggedIn) {
+      getUserType()?.then((userType) => {
+        if (userType === "admin") {
+          setIsAdmin(true);
+          setIsSportsbook(false);
+        } else if (userType === "sportsbook") {
+          setIsSportsbook(true);
+          setIsAdmin(false);
+        } else {
+          setIsAdmin(false);
+          setIsSportsbook(false);
+        }
+      });
+      
+    }
   }, [isLoggedIn]);
-
+  
   if (isLoggedIn === null) {
     return <Spinner className="app-spinner dark" />;
   }
