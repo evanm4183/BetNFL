@@ -19,9 +19,9 @@ export default function GameCard({game, isAdmin, isSportsbook}) {
     const handleClick = () => {
         if (isAdmin) {
             navigate(`editGame/${game.id}`);
-        } else if (isSportsbook) {
+        } else if (isSportsbook && (!game.homeTeamScore && !game.awayTeamScore)) {
             navigate(`createBet/${game.id}`);
-        } else {
+        } else if (!game.homeTeamScore && !game.awayTeamScore) {
             navigate(`viewBets/${game.id}`);
         }
     }
