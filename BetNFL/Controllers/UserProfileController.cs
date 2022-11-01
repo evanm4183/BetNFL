@@ -38,6 +38,7 @@ namespace BetNFL.Controllers
         public IActionResult RegisterNewUser(UserProfile userProfile)
         {
             _userProfileRepo.RegisterNewUser(userProfile);
+            return NoContent();
         }
         
         [HttpPut]
