@@ -25,3 +25,14 @@ export const postUserProfileBet = (upBet) => {
         })
     });
 }
+
+export const settleOpenBetsByGame = (gameId) => {
+    return getToken().then((token) => {
+        return fetch(`${apiUrl}/${gameId}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+    });
+}

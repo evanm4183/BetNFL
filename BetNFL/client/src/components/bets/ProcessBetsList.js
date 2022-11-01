@@ -5,10 +5,14 @@ import ProcessBetsCard from "./ProcessBetsCard";
 export default function ProcessBetsList() {
     const [gamesWithOpenBets, setGamesWithOpenBets] = useState();
 
-    useEffect(() => {
+    const getAndSetGamesWithOpenBets = () => {
         getGamesWithOpenBets().then((games) => {
             setGamesWithOpenBets(games);
         });
+    }
+
+    useEffect(() => {
+        getAndSetGamesWithOpenBets();
     }, []);
 
     return (
@@ -19,6 +23,7 @@ export default function ProcessBetsList() {
                         <ProcessBetsCard 
                             key={game.id}
                             game={game}
+                            getAndSetGamesWithOpenBets={getAndSetGamesWithOpenBets}
                         />
                     )
                 })
