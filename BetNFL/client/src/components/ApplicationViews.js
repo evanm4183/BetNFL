@@ -8,6 +8,9 @@ import GameEditForm from "./games/GameEditForm";
 import BetPropertiesForm from "./bets/BetPropertiesForm";
 import BetList from "./bets/BetList";
 import PlaceBetForm from "./bets/PlaceBetForm";
+import OpenBetsList from "./bets/OpenBetsList";
+import ProfilePage from "./userProfile/ProfilePage";
+import ProcessBetsList from "./bets/ProcessBetsList";
 
 export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
     return (
@@ -37,7 +40,7 @@ export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
                         />
                         <Route 
                             path="processBets" 
-                            element={isLoggedIn ? <div>Process Bets</div> : <Navigate to="/login" />}
+                            element={isLoggedIn ? <ProcessBetsList /> : <Navigate to="/login" />}
                         /> 
                         <Route
                             path="editGame/:gameId"
@@ -57,11 +60,11 @@ export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
                 {/* Non-Admin Routes */}
                 <Route 
                     path="openBets" 
-                    element={isLoggedIn ? <div>Open Bets</div> : <Navigate to="/login" />} 
+                    element={isLoggedIn ? <OpenBetsList /> : <Navigate to="/login" />} 
                 />
                 <Route 
                     path="profile" 
-                    element={isLoggedIn ? <div>Profile</div> : <Navigate to="/login" />} 
+                    element={isLoggedIn ? <ProfilePage /> : <Navigate to="/login" />} 
                 />
                 <Route 
                     path="viewBets/:gameId" 

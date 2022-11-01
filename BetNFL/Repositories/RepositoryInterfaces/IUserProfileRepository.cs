@@ -6,5 +6,6 @@ namespace BetNFL.Repositories
     {
         UserProfile GetByFirebaseUserId(string firebaseUserId);
         void RegisterNewUser(UserProfile userProfile);
+        void AddFunds(UserProfile userProfile);
     }
 }

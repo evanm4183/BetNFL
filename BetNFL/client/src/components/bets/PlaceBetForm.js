@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { getBetById } from "../../modules/betManager";
 import { postUserProfileBet } from "../../modules/userProfileBetManager";
@@ -83,6 +83,9 @@ export default function PlaceBetForm() {
                             return;
                         } else if (userProfileBet.betAmount >= 10000000) {
                             window.alert("Error: Maximum bet amount exceeded");
+                            return;
+                        } else if (userProfileBet.betAmount < 1) {
+                            window.alert("Error: Minimum bet amount is $1.00");
                             return;
                         }
                         

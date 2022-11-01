@@ -5,10 +5,29 @@
     margin-top: 1%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 50px;
     width: 50%;
 }
 
 .button-row {
     display: flex;
     justify-content: space-evenly;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    border: solid gray 1px;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 85%;
+}
+
+.form-title {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }

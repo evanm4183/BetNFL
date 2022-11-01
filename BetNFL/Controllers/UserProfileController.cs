@@ -17,6 +17,12 @@ namespace BetNFL.Controllers
             _userProfileRepo = userProfileRepo;
         }
 
+        [HttpGet]
+        public IActionResult GetCurrentUser()
+        {
+            return Ok(AuthUtils.GetCurrentUserProfile(User, _userProfileRepo));
+        }
+
         [HttpGet("DoesUserExist/{firebaseUserId}")]
         public IActionResult DoesUserExist(string firebaseUserId)
         {
@@ -32,6 +38,12 @@ namespace BetNFL.Controllers
         public IActionResult RegisterNewUser(UserProfile userProfile)
         {
             _userProfileRepo.RegisterNewUser(userProfile);
+        }
+        
+        [HttpPut]
+        public IActionResult AddFunds(UserProfile userProfile)
+        {
+            _userProfileRepo.AddFunds(userProfile);
             return NoContent();
         }
 
