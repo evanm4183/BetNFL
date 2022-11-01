@@ -48,6 +48,57 @@ namespace BetNFL.Repositories
             }
         }
 
+        public List<Game> GetGamesWithOpenBets()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT g.Id GameId, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
+                               g.AwayTeamScore, g.KickoffTime, g.[Week], g.[Year],
+                               ht.LocationName AS HomeLocationName, ht.TeamName AS HomeTeamName, 
+                               ht.Abbreviation AS HomeAbbreviation, ht.LogoUrl AS HomeLogoUrl,
+                               awt.LocationName AS AwayLocationName, awt.TeamName AS AwayTeamName, 
+                               awt.Abbreviation AS AwayAbbreviation, awt.LogoUrl AS AwayLogoUrl
+                        FROM
+
+                        /* table of unique GameId's that have open bets */
+                            (
+                                SELECT DISTINCT(GameId) 
+                                FROM
+
+                                    /* table of unique BetId's that have open bets */
+                                    (
+                                        SELECT DISTINCT(upb.BetId) OpenBetId
+                                        FROM UserProfileBet upb
+                                        WHERE ProcessedDateTime IS NULL
+                                    ) openBet
+                                    LEFT JOIN Bet b ON b.Id = OpenBet.OpenBetId
+                            ) gameWithOpenBet
+                            LEFT JOIN Game g ON g.Id = gameWithOpenBet.GameId
+                            LEFT JOIN Team ht ON ht.id = g.HomeTeamId
+                            LEFT JOIN Team awt ON awt.id = g.AwayTeamId
+                        ORDER BY g.[Year] ASC, g.[Week]
+                    ";
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        var games = new List<Game>();
+
+                        while (reader.Read())
+                        {
+                            Game game = DbUtils.ReadGame(reader);
+                            games.Add(game);
+                        }
+
+                        return games;
+                    }
+                }
+            }
+        }
+
         public Game GetGameById(int id)
         {
             using (var conn = Connection)
@@ -103,10 +154,15 @@ namespace BetNFL.Repositories
                         FROM Game g
                             LEFT JOIN Team ht ON ht.id = g.HomeTeamId
                             LEFT JOIN Team awt ON awt.id = g.AwayTeamId
-                            LEFT JOIN (SELECT b.*, bt.Name, up.Username FROM Bet b
-                                LEFT JOIN BetType bt ON bt.Id = b.BetTypeId
-                                LEFT JOIN UserProfile up ON up.Id = b.UserProfileId
-                                WHERE b.IsLive = 1) liveBet ON liveBet.GameId = g.Id
+                            LEFT JOIN 
+                                (
+                                    SELECT b.*, bt.Name, up.Username 
+                                    FROM Bet b
+                                        LEFT JOIN BetType bt ON bt.Id = b.BetTypeId
+                                        LEFT JOIN UserProfile up ON up.Id = b.UserProfileId
+                                    WHERE b.IsLive = 1
+                                ) 
+                                liveBet ON liveBet.GameId = g.Id
                             WHERE g.Id = @id
                             ORDER BY liveBet.Username ASC
                     ";

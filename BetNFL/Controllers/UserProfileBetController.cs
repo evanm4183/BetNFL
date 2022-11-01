@@ -35,5 +35,12 @@ namespace BetNFL.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{gameId}")]
+        public IActionResult SettleOpenBetsByGame(int gameId)
+        {
+            _upBetRepo.SettleOpenBetsByGame(gameId);
+            return NoContent();
+        }
     }
 }

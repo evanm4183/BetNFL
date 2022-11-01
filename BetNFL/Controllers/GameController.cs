@@ -27,6 +27,12 @@ namespace BetNFL.Controllers
             return Ok(_gameRepo.GetAllGamesInWeek(week));
         }
 
+        [HttpGet("GamesWithOpenBets")]
+        public IActionResult GetGamesWithOpenBets()
+        {
+            return Ok(_gameRepo.GetGamesWithOpenBets());
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetGameById(int id)
         {

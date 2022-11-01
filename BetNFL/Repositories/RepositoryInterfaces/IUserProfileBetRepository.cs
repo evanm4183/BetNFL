@@ -8,5 +8,6 @@ namespace BetNFL.Repositories
     {
         List<UserProfileBet> GetMyOpenBets(int userId);
         void PostUserProfileBet(UserProfileBet upBet);
+        void SettleOpenBetsByGame(int gameId);
     }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { getBetById } from "../../modules/betManager";
 import { postUserProfileBet } from "../../modules/userProfileBetManager";
