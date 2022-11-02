@@ -41,7 +41,8 @@ namespace BetNFL.Repositories
                                 {
                                     Id = DbUtils.GetInt(reader, "UserTypeId"),
                                     Name = DbUtils.GetString(reader, "Name")
-                                }
+                                },
+                                UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
                             };
                             return user;
                         }

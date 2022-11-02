@@ -58,7 +58,7 @@ namespace BetNFL.Controllers
         public IActionResult GetUserType()
         {
             var currentUser = AuthUtils.GetCurrentUserProfile(User, _userProfileRepo);
-            return Ok(currentUser.UserType.Name);
+            return Ok(currentUser != null ? currentUser.UserType.Name : "Not found");
         }
     }
 }
