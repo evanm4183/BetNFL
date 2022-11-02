@@ -60,7 +60,7 @@ export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
                 {/* Non-Admin Routes */}
                 <Route 
                     path="openBets" 
-                    element={isLoggedIn ? <OpenBetsList /> : <Navigate to="/login" />} 
+                    element={isLoggedIn ? <OpenBetsList isSportsbook={isSportsbook}/> : <Navigate to="/login" />} 
                 />
                 <Route 
                     path="profile" 

@@ -9,7 +9,7 @@ namespace BetNFL.Repositories
     {
         public UserProfileBetRepository(IConfiguration configuration) : base(configuration) { }
 
-        public List<UserProfileBet> GetMyOpenBets(int userId)
+        public List<UserProfileBet> GetBettorOpenBets(int userId)
         {
             using (var conn = Connection)
             {
@@ -35,7 +35,8 @@ namespace BetNFL.Repositories
                             LEFT JOIN Team awt ON awt.id = g.AwayTeamId
                             LEFT JOIN UserProfile sb ON sb.Id = b.UserProfileId
                             LEFT JOIN BetType bt ON bt.Id = b.BetTypeId
-                        WHERE upb.UserProfileId = @userId AND upb.ProcessedDateTime IS NULL
+                        WHERE upb.UserProfileId = @userId 
+                            AND upb.ProcessedDateTime IS NULL
                         ORDER BY upb.CreateDateTime DESC
                     ";
                     cmd.Parameters.AddWithValue("@userId", userId);
@@ -58,6 +59,71 @@ namespace BetNFL.Repositories
                                 Bet = DbUtils.ReadBet(reader)
                             };
                             openBet.Bet.Game = DbUtils.ReadGame(reader);
+
+                            openBets.Add(openBet);
+                        }
+
+                        return openBets;
+                    }
+                }
+            }
+        }
+
+        public List<UserProfileBet> GetSportsbookOpenBets(int userId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT upb.Id UserProfileBetId, upb.UserProfileId BettorId, upb.BetId,
+                               upb.WinnerId, upb.Side, upb.BetAmount, upb.CreateDateTime upbCreateDateTime,
+                               b.Id BetId, b.UserProfileId, b.BetTypeId, b.Line, 
+                               b.AwayTeamOdds, b.HomeTeamOdds, b.CreateDateTime, b.isLive,
+                               g.Id GameId, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
+                               g.AwayTeamScore, g.KickoffTime, g.[Week], g.[Year],
+                               awt.LocationName AwayLocationName, awt.TeamName AwayTeamName, 
+                               awt.Abbreviation AwayAbbreviation, awt.LogoUrl AwayLogoUrl,
+                               ht.LocationName HomeLocationName, ht.TeamName HomeTeamName, 
+                               ht.Abbreviation HomeAbbreviation, ht.LogoUrl HomeLogoUrl,
+                               sb.Username, bt.Name, btr.Username BettorUsername
+                        FROM UserProfileBet upb
+                            LEFT JOIN Bet b ON b.Id = upb.BetId
+                            LEFT JOIN Game g ON g.Id = b.GameId
+                            LEFT JOIN Team ht ON ht.id = g.HomeTeamId
+                            LEFT JOIN Team awt ON awt.id = g.AwayTeamId
+                            LEFT JOIN UserProfile sb ON sb.Id = b.UserProfileId
+                            LEFT JOIN UserProfile btr ON btr.Id = upb.UserProfileId
+                            LEFT JOIN BetType bt ON bt.Id = b.BetTypeId
+                        WHERE b.UserProfileId = @userId 
+                            AND upb.ProcessedDateTime IS NULL
+                        ORDER BY b.GameId, upb.CreateDateTime DESC
+                    ";
+                    cmd.Parameters.AddWithValue("@userId", userId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        List<UserProfileBet> openBets = new List<UserProfileBet>();
+
+                        while (reader.Read())
+                        {
+                            UserProfileBet openBet = new UserProfileBet()
+                            {
+                                Id = DbUtils.GetInt(reader, "UserProfileBetId"),
+                                UserProfileId = DbUtils.GetInt(reader, "BettorId"),
+                                BetId = DbUtils.GetInt(reader, "BetId"),
+                                WinnerId = DbUtils.GetNullableInt(reader, "WinnerId"),
+                                Side = DbUtils.GetInt(reader, "Side"),
+                                BetAmount = DbUtils.GetDecimal(reader, "BetAmount"),
+                                CreateDateTime = DbUtils.GetDateTime(reader, "upbCreateDateTime"),
+                                Bet = DbUtils.ReadBet(reader)
+                            };
+                            openBet.Bet.Game = DbUtils.ReadGame(reader);
+                            openBet.UserProfile = new UserProfile()
+                            {
+                                Username = DbUtils.GetString(reader, "BettorUsername")
+                            };
 
                             openBets.Add(openBet);
                         }

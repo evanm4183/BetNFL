@@ -6,7 +6,8 @@ namespace BetNFL.Repositories
 {
     public interface IUserProfileBetRepository
     {
-        List<UserProfileBet> GetMyOpenBets(int userId);
+        List<UserProfileBet> GetBettorOpenBets(int userId);
+        List<UserProfileBet> GetSportsbookOpenBets(int userId);
         void PostUserProfileBet(UserProfileBet upBet);
         void SettleOpenBetsByGame(int gameId);
     }

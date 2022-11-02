@@ -19,11 +19,18 @@ namespace BetNFL.Controllers
             _userProfileRepo = userProfileRepo;
         }
 
-        [HttpGet]
-        public IActionResult GetMyOpenBets()
+        [HttpGet("BettorOpenBets")]
+        public IActionResult GetBettorOpenBets()
         {
             var currentUser = AuthUtils.GetCurrentUserProfile(User, _userProfileRepo);
-            return Ok(_upBetRepo.GetMyOpenBets(currentUser.Id));
+            return Ok(_upBetRepo.GetBettorOpenBets(currentUser.Id));
+        }
+
+        [HttpGet("SportsbookOpenBets")]
+        public IActionResult GetSportsbookOpenBets()
+        {
+            var currentUser = AuthUtils.GetCurrentUserProfile(User, _userProfileRepo);
+            return Ok(_upBetRepo.GetSportsbookOpenBets(currentUser.Id));
         }
 
         [HttpPost]

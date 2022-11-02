@@ -17,7 +17,6 @@ function App() {
   }, []);
   
   useEffect(() => {
-    
     if (isLoggedIn) {
       getUserType()?.then((userType) => {
         if (userType === "admin") {
