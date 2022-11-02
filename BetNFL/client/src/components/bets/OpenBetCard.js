@@ -1,6 +1,4 @@
-
-
-export default function OpenBetCard({openBet}) {
+export default function OpenBetCard({openBet, isSportsbook}) {
     const formatOdds = (odds) => {
         if (odds > 0) {
             return "+" + odds;
@@ -12,8 +10,19 @@ export default function OpenBetCard({openBet}) {
         <div className="open-bet-card">
             <div>
                 <div>
-                    <strong>Sportsbook: </strong>
-                    {openBet.bet.userProfile.username}
+                    {
+                        isSportsbook 
+                        ? 
+                            <>
+                                <strong>Username: </strong>
+                                {openBet.userProfile.username}
+                            </>
+                        :
+                            <>
+                                <strong>Sportsbook: </strong>
+                                {openBet.bet.userProfile.username}
+                            </>
+                    }
                 </div>
             </div>
             <div>

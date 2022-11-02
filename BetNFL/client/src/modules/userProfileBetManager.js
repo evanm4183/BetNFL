@@ -2,9 +2,20 @@ import { getToken } from "./authManager";
 
 const apiUrl = "/api/userProfileBet";
 
-export const getMyOpenBets = () => {
+export const getBettorOpenBets = () => {
     return getToken().then((token) => {
-        return fetch(apiUrl, {
+        return fetch(`${apiUrl}/BettorOpenBets`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        }).then((res) => res.json());
+    });
+}
+
+export const getSportsbookOpenBets = () => {
+    return getToken().then((token) => {
+        return fetch(`${apiUrl}/SportsbookOpenBets`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`

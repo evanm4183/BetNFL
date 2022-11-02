@@ -1,5 +1,4 @@
 ﻿using System;
-using BetNFL.Models;
 
 namespace BetNFL.Models
 {
@@ -14,5 +13,6 @@ namespace BetNFL.Models
         public DateTime CreateDateTime { get; set; }
         public DateTime ProcessedDateTime { get; set; }
         public Bet Bet { get; set; }
+        public UserProfile UserProfile { get; set; }
     }
 }
