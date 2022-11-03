@@ -18,10 +18,12 @@ export default function OpenBetsList({isSportsbook}) {
     }, []);
 
     return (
-        <div className="open-bets-list">
-            {
-                openBets?.map((bet) => <OpenBetCard key={bet.id} openBet={bet} isSportsbook={isSportsbook}/>)
-            }
+        <div className="open-bet-container">
+            <div className="open-bets-list">
+                {
+                    openBets?.map((bet) => <OpenBetCard key={bet.id} openBet={bet} isSportsbook={isSportsbook}/>)
+                }
+            </div>
         </div>
     );
 }

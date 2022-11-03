@@ -19,20 +19,20 @@ export default function GameList({isAdmin, isSportsbook}) {
     }, []);
     
     return (
-        <>
-            <h4 className="game-list-header">Week {currWeek}</h4>
-            <div className="game-list-container">
-                {
-                    games.map((game) => 
-                        <GameCard 
-                            key={game.id} 
-                            game={game} 
-                            isAdmin={isAdmin}
-                            isSportsbook={isSportsbook}
-                        />
-                    )
-                }
+            <div className="center-container">
+                <h2 className="game-list-header">Week {currWeek}</h2>
+                <div className="game-list-container">
+                    {
+                        games.map((game) => 
+                            <GameCard 
+                                key={game.id} 
+                                game={game} 
+                                isAdmin={isAdmin}
+                                isSportsbook={isSportsbook}
+                            />
+                        )
+                    }
+                </div>
             </div>
-        </>
     );
 }

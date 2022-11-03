@@ -16,18 +16,20 @@ export default function ProcessBetsList() {
     }, []);
 
     return (
-        <div className="open-bets-list">
-            {
-                gamesWithOpenBets?.map((game) => {
-                    return (
-                        <ProcessBetsCard 
-                            key={game.id}
-                            game={game}
-                            getAndSetGamesWithOpenBets={getAndSetGamesWithOpenBets}
-                        />
-                    )
-                })
-            }    
+        <div className="open-bet-container">
+            <div className="open-bets-list">
+                {
+                    gamesWithOpenBets?.map((game) => {
+                        return (
+                            <ProcessBetsCard 
+                                key={game.id}
+                                game={game}
+                                getAndSetGamesWithOpenBets={getAndSetGamesWithOpenBets}
+                            />
+                        )
+                    })
+                }    
+            </div>
         </div>
     )
 }

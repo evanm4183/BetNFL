@@ -15,19 +15,19 @@ export default function BetList() {
     }, []);
     
     return (
-        <>
-            <h4 className="game-list-header">{game.awayTeam?.fullName} @ {game.homeTeam?.fullName}, Week {game.week}</h4>
-            <div className="game-list-container">
-                {
-                    game?.liveBets?.map((bet) => 
-                        <BetCard 
-                            key={bet.id} 
-                            game={game} 
-                            bet={bet}
-                        />
-                    )
-                }
+            <div className="center-container">
+                <h4 className="game-list-header">{game.awayTeam?.fullName} @ {game.homeTeam?.fullName}, Week {game.week}</h4>
+                <div className="game-list-container">
+                    {
+                        game?.liveBets?.map((bet) => 
+                            <BetCard 
+                                key={bet.id} 
+                                game={game} 
+                                bet={bet}
+                            />
+                        )
+                    }
+                </div>
             </div>
-        </>
     );
 }

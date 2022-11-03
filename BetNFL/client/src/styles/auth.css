@@ -1,0 +1,23 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    border: solid black 3px;
+    border-radius: 15px;
+    width: 40%;
+    height: fit-content;
+    background-color: rgba(245, 245, 245);
+    padding-bottom: 20px;
+    margin-top: 90px;
+}
+
+.register-container {
+    display: flex;
+    flex-direction: column;
+    border: solid black 3px;
+    border-radius: 15px;
+    width: 40%;
+    height: fit-content;
+    background-color: rgba(245, 245, 245);
+    padding-bottom: 20px;
+    margin-top: 60px;
+}

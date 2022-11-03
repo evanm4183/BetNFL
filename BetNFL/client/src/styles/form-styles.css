@@ -1,12 +1,13 @@
 .form-container {
     border: solid gray 1px;
     border-radius: 10px;
+    background-color: rgba(245, 245, 245);
     padding: 20px;
-    margin-top: 1%;
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 50px;
-    width: 50%;
+    width: 80%;
 }
 
 .button-row {
@@ -26,8 +27,14 @@
     width: 85%;
 }
 
+.form-head-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+}
+
 .form-title {
     display: flex;
     justify-content: center;
-    margin-top: 10px;
 }

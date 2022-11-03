@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import "../../styles/form-styles.css";
+import "../../styles/game-styles.css";
 import { getTeams } from "../../modules/teamManager";
 import { getSiteTime } from "../../modules/siteTimeManager";
 import { postGame } from "../../modules/gameManager";
@@ -31,7 +32,7 @@ export default function GameForm() {
     }, []);
 
     return (
-        <Form className="form-container" style={{width: "50%"}}>
+        <Form className="add-game-container" style={{width: "50%"}}>
             <FormGroup>
                 <Label for="awayTeam">Away Team</Label>
                 <Input 

@@ -1,3 +1,5 @@
+import "../../styles/bet-styles.css";
+
 export default function OpenBetCard({openBet, isSportsbook}) {
     const formatOdds = (odds) => {
         if (odds > 0) {
@@ -9,54 +11,68 @@ export default function OpenBetCard({openBet, isSportsbook}) {
     return (
         <div className="open-bet-card">
             <div>
-                <div>
+                <div className="open-bet-section">
                     {
                         isSportsbook 
                         ? 
                             <>
                                 <strong>Username: </strong>
-                                {openBet.userProfile.username}
+                                <div>
+                                    {openBet.userProfile.username}
+                                </div>
                             </>
                         :
                             <>
                                 <strong>Sportsbook: </strong>
-                                {openBet.bet.userProfile.username}
+                                <div>
+                                    {openBet.bet.userProfile.username}
+                                </div>
                             </>
                     }
                 </div>
             </div>
-            <div>
+            <div className="open-bet-section" style={{width: "9rem", backgroundColor: "gainsboro"}}>
                 <div>
                     <strong>Game: </strong>
-                    {openBet.bet.game.awayTeam.abbreviation} @ {openBet.bet.game.homeTeam.abbreviation}
+                    <div>
+                        {openBet.bet.game.awayTeam.abbreviation} @ {openBet.bet.game.homeTeam.abbreviation}
+                    </div>
                 </div>
             </div>
             <div>
-                <div>
+                <div className="open-bet-section" style={{width: "9rem"}}>
                     <strong>When: </strong>
-                    Week {openBet.bet.game.week} - {openBet.bet.game.year}
+                    <div>
+                        Week {openBet.bet.game.week} - {openBet.bet.game.year}
+                    </div>
                 </div>
             </div>
             <div>
-                <div>
+                <div className="open-bet-section" style={{width: "9rem", backgroundColor: "gainsboro"}}>
                     <strong>Side: </strong>
-                    {
-                        openBet.side === 1 
-                        ? `${openBet.bet.game.awayTeam.abbreviation} ${formatOdds(openBet.bet.awayTeamOdds)}`
-                        : `${openBet.bet.game.homeTeam.abbreviation} ${formatOdds(openBet.bet.homeTeamOdds)}`
-                    }
+                    <div>
+                        {
+                            openBet.side === 1 
+                            ? `${openBet.bet.game.awayTeam.abbreviation} ${formatOdds(openBet.bet.awayTeamOdds)}`
+                            : `${openBet.bet.game.homeTeam.abbreviation} ${formatOdds(openBet.bet.homeTeamOdds)}`
+                        }
+                    </div>
                 </div>
             </div>
             <div>
-                <div>
+                <div className="open-bet-section" style={{width: "9rem"}}>
                     <strong>Bet Amount: </strong>
-                    ${openBet.betAmount}
+                    <div>
+                        ${openBet.betAmount}
+                    </div>
                 </div>
             </div>
             <div>
-                <div>
+                <div className="open-bet-section" style={{backgroundColor: "gainsboro"}}>
                     <strong>Date Placed: </strong>
-                    {new Date(openBet.createDateTime).toLocaleString()}
+                    <div>
+                        {new Date(openBet.createDateTime).toLocaleString()}
+                    </div>
                 </div>
             </div>
         </div>

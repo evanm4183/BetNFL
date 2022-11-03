@@ -1,0 +1,11 @@
+.small-form-container {
+    display: flex;
+    flex-direction: column;
+    border: solid black 3px;
+    border-radius: 15px;
+    width: 30%;
+    height: fit-content;
+    background-color: rgba(245, 245, 245);
+    padding: 20px;
+    margin-top: 170px;
+}

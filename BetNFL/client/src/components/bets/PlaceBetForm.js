@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { getBetById } from "../../modules/betManager";
 import { postUserProfileBet } from "../../modules/userProfileBetManager";
+import "../../styles/small-form.css";
 
 export default function PlaceBetForm() {
     const [bet, setBet] = useState();
@@ -29,7 +30,7 @@ export default function PlaceBetForm() {
     }, []);
 
     return (
-        <div className="form-container">
+        <div className="small-form-container" style={{marginTop: "130px", width: "40%"}}>
             <h4 className="bet-form-header">
                 {bet?.game?.awayTeam?.fullName} @ {bet?.game?.homeTeam?.fullName}, Week {bet?.game?.week}
             </h4>

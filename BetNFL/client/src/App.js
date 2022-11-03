@@ -41,7 +41,9 @@ function App() {
   return (
     <Router>
       <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
-      <ApplicationViews isLoggedIn={isLoggedIn} isAdmin={isAdmin} isSportsbook={isSportsbook}/>
+      <div className="main-container">
+        <ApplicationViews isLoggedIn={isLoggedIn} isAdmin={isAdmin} isSportsbook={isSportsbook} />
+      </div>
     </Router>
   );
 }
