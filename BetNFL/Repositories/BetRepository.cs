@@ -20,6 +20,7 @@ namespace BetNFL.Repositories
                         WHERE UserProfileId = @userProfileId
                             AND GameId = @gameId
                             AND IsLive = 1
+                        ORDER BY Bet.UserProfileId
                     ";
                     cmd.Parameters.AddWithValue("@userProfileId", userProfileId);
                     cmd.Parameters.AddWithValue("@gameId", gameId);
