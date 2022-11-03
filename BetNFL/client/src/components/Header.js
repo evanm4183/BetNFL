@@ -17,11 +17,11 @@ export default function Header({ isLoggedIn, isAdmin }) {
 
   return (
     <div>
-      <Navbar color="light" light expand="md">
+      <Navbar className="navbar navbar-dark" expand="md" style={{backgroundColor: "#000066"}}>
         <img 
           src="https://loodibee.com/wp-content/uploads/nfl-league-logo.png"
           alt="NFL Logo"
-          height={50}
+          height={60}
         />
         <NavbarBrand tag={RRNavLink} to="/">BetNFL</NavbarBrand>
         <NavbarToggler onClick={toggle} />

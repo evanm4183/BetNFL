@@ -41,7 +41,7 @@ function App() {
   return (
     <Router>
       <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
-      <ApplicationViews isLoggedIn={isLoggedIn} isAdmin={isAdmin} isSportsbook={isSportsbook}/>
+      <ApplicationViews isLoggedIn={isLoggedIn} isAdmin={isAdmin} isSportsbook={isSportsbook} />
     </Router>
   );
 }

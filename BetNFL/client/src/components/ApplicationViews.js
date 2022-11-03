@@ -11,6 +11,7 @@ import PlaceBetForm from "./bets/PlaceBetForm";
 import OpenBetsList from "./bets/OpenBetsList";
 import ProfilePage from "./userProfile/ProfilePage";
 import ProcessBetsList from "./bets/ProcessBetsList";
+import "../App.css";
 
 export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
     return (

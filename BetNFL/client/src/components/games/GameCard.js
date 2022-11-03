@@ -33,7 +33,7 @@ export default function GameCard({game, isAdmin, isSportsbook}) {
                 <img 
                     src={game.awayTeam.logoUrl}
                     alt="Away Team Logo"
-                    height={50}
+                    height={60}
                 />
                 <div className="game-text">{game.awayTeam.teamName}</div>
                 <div className="score-text">{game.awayTeamScore ? game.awayTeamScore : ""}</div>
@@ -42,7 +42,7 @@ export default function GameCard({game, isAdmin, isSportsbook}) {
                 <img 
                     src={game.homeTeam.logoUrl}
                     alt="Home Team Logo"
-                    height={50}
+                    height={60}
                 />
                 <div className="game-text">{game.homeTeam.teamName}</div>
                 <div className="score-text">{game.homeTeamScore ? game.homeTeamScore : ""}</div>
