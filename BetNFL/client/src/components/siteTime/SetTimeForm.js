@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
-import "../../styles/form-styles.css";
+import "../../styles/small-form.css";
 import { getSiteTime, updateSiteTime } from "../../modules/siteTimeManager";
 
 export default function SetTimeForm() {
@@ -33,7 +33,7 @@ export default function SetTimeForm() {
     }, []);
 
     return (
-        <Form className="form-container" style={{width: "25%"}}>
+        <Form className="small-form-container" style={{width: "25%"}}>
             <FormGroup>
                 <Label for="exampleEmail">Current Week</Label>
                 <Input 

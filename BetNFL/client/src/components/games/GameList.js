@@ -19,7 +19,6 @@ export default function GameList({isAdmin, isSportsbook}) {
     }, []);
     
     return (
-        <div className="main-game-container">
             <div className="center-container">
                 <h2 className="game-list-header">Week {currWeek}</h2>
                 <div className="game-list-container">
@@ -35,6 +34,5 @@ export default function GameList({isAdmin, isSportsbook}) {
                     }
                 </div>
             </div>
-        </div>
     );
 }

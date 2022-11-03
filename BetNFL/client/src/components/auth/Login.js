@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../../modules/authManager";
+import "../../styles/auth.css";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function Login() {
   };
 
   return (
-    <>
+      <div className="login-container">
       <div className="form-head-title">
         <img 
           src="https://loodibee.com/wp-content/uploads/nfl-league-logo.png"
@@ -53,6 +54,6 @@ export default function Login() {
           </em>
         </fieldset>
       </Form>
-    </>
+      </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import "../../styles/form-styles.css";
+import "../../styles/small-form.css";
 import { getGameById, setScore, deleteGame } from "../../modules/gameManager";
 
 export default function GameEditForm() {
@@ -16,7 +16,7 @@ export default function GameEditForm() {
     }, []);
 
     return (
-        <Form className="form-container" style={{width: "50%"}}>
+        <Form className="small-form-container">
             <FormGroup>
                 <Label for="awayTeam">{game?.awayTeam?.fullName} Score</Label>
                 <Input 

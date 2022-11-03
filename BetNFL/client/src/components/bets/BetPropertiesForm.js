@@ -4,6 +4,7 @@ import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import "../../styles/form-styles.css";
 import { getGameById } from "../../modules/gameManager";
 import { postBet, getLiveBetForGame, closeBet } from "../../modules/betManager";
+import "../../styles/small-form.css";
 
 
 export default function BetPropertiesForm() {
@@ -41,7 +42,7 @@ export default function BetPropertiesForm() {
     }, []);
 
     return (
-        <Form className="form-container" style={{width: "50%"}}>
+        <Form className="small-form-container">
             <FormGroup>
             <Label for="awayTeamOdds">{game?.awayTeam?.fullName} Odds</Label>
                 <Input 

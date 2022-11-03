@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Form, FormGroup, Input, Button, Label } from "reactstrap";
 import { getCurrentUser, addFunds } from "../../modules/userProfileManager";
+import "../../styles/profile.css";
 
 export default function ProfilePage() {
     const [currentUser, setCurrentUser] = useState();
@@ -18,23 +19,23 @@ export default function ProfilePage() {
     }, []);
 
     return (
-        <>
-            <h2 className="form-title">Your Account</h2>
+        <div className="profile-container">
+            <h2 className="profile-title">Your Account</h2>
             <div className="form-container">
-                <h4 className="form-title">Account Details</h4>
-                <div className="form-section">
+                <h4 className="profile-title">Account Details</h4>
+                <div className="profile-sub-container">
                     <div><strong>Username:</strong> {currentUser?.username}</div>
                     <div><strong>Email:</strong> {currentUser?.email}</div>
                     <div><strong>Account Type:</strong> {currentUser?.userType.name.toUpperCase()}</div>
                 </div>
-                <h4 className="form-title">Available Funds</h4>
-                <div className="form-section">
+                <h4 className="profile-title">Available Funds</h4>
+                <div className="profile-sub-container">
                     <h4 style={{display: "flex", justifyContent: "center", fontWeight: "normal"}}>
                         ${currentUser?.availableFunds.toFixed(2)}
                     </h4>
                 </div>
-                <h4 className="form-title">Add Funds</h4>
-                <div className="form-section">
+                <h4 className="profile-title">Add Funds</h4>
+                <div className="profile-sub-container">
                     <Form>
                         <FormGroup>
                             <Label for="addFunds">Enter an Amount</Label>
@@ -60,6 +61,6 @@ export default function ProfilePage() {
                     </Form>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

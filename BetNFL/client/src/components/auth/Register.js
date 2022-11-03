@@ -3,6 +3,7 @@ import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
 import { register } from "../../modules/authManager";
 import { getPublicUserTypes } from "../../modules/userTypeManager";
+import "../../styles/auth.css";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function Register() {
   }, []);
 
   return (
-    <>
+    <div className="register-container">
       <div className="form-head-title">
           <img 
             src="https://loodibee.com/wp-content/uploads/nfl-league-logo.png"
@@ -102,6 +103,6 @@ export default function Register() {
           </FormGroup>
         </fieldset>
       </Form>
-    </>
+    </div>
   );
 }
