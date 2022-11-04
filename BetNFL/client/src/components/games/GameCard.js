@@ -5,7 +5,7 @@ export default function GameCard({game, isAdmin, isSportsbook}) {
     const navigate = useNavigate();
     
     const getTimeDiv = () => {
-        if (game.awayTeamScore && game.homeTeamScore) {
+        if (game.awayTeamScore !== null && game.homeTeamScore !== null) {
             return <div className="time-text" style={{fontWeight: "bold"}}>Final</div>;
         }
 
@@ -36,7 +36,7 @@ export default function GameCard({game, isAdmin, isSportsbook}) {
                     height={60}
                 />
                 <div className="game-text">{game.awayTeam.teamName}</div>
-                <div className="score-text">{game.awayTeamScore ? game.awayTeamScore : ""}</div>
+                <div className="score-text">{game.awayTeamScore !== null ? game.awayTeamScore : ""}</div>
             </div>
             <div className="team-row">
                 <img 
@@ -45,7 +45,7 @@ export default function GameCard({game, isAdmin, isSportsbook}) {
                     height={60}
                 />
                 <div className="game-text">{game.homeTeam.teamName}</div>
-                <div className="score-text">{game.homeTeamScore ? game.homeTeamScore : ""}</div>
+                <div className="score-text">{game.homeTeamScore !== null ? game.homeTeamScore : ""}</div>
             </div>
         </div>
     );

@@ -47,7 +47,7 @@ export default function ProcessBetsCard({game, getAndSetGamesWithOpenBets}) {
             </div>
             <Button
                 onClick={() => {
-                    if (!game.awayTeamScore || !game.homeTeamScore) {
+                    if (game.awayTeamScore === null || game.homeTeamScore === null) {
                         window.alert("Error: cannot process bets for a game without a final score");
                         return
                     }
