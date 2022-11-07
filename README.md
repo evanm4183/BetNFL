@@ -26,7 +26,7 @@ This is the view when a bettor or sportsbook logs in to the site. A bettor can c
 ![Home Page](./Readme_Photos/HomePage.png)
 
 ### Available Bets
-As stated above, this is the view for bettors when they click on a game. Furthermore, bettors can click on the card with the odds they like and are given a form to place a bet. 
+As stated above, this is the view for bettors when they click on a game. Furthermore, bettors can click on one of these cards, and they will be prompted with a form to place a bet. 
 
 ![View Odds](./Readme_Photos/AvailableBets.png)
 
