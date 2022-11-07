@@ -36,6 +36,6 @@ This is the profile page where bettors and sportsbooks can view their account de
 ![Profile](./Readme_Photos/Profile.png)
 
 ### Process Bets
-This view shows all the games with unprocessed bets. However, only bets on games with final scores can be processed. When clicking "Process Bets", funds will be automatically added to or subtracted from bettors and sportsbooks in accordance with the odds and winner of the bet for all bets placed on the game.
+This view shows all the games with unprocessed bets. However, only bets on games with final scores can be processed. When clicking "Settle Open Bets", funds will be automatically added to or subtracted from bettors and sportsbooks in accordance with the odds and winner of the bet for all bets placed on the game.
 
 ![Process Bets](./Readme_Photos/ProcessBets.png)
