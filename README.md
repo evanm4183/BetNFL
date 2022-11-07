@@ -8,7 +8,7 @@ BetNFL is a sports betting website for moneyline bets on NFL games. It connects 
 ## Features
 
 - Three unique user experiences:
-  - Bettors can select a game and place bets based off the odds given by the sportsbooks
+  - Bettors can select a game and place bets using the odds given by the sportsbooks
   - Sportsbook can set and adjust odds on games. These odds will be displayed to bettors for them to place bets.
   - Admins control site wide data (such as the scores of the games and the current week of games to display) and process bets once the games have been played
 - Home page that displays all of the games for the current week in the NFL
