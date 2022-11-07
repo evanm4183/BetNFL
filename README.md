@@ -22,4 +22,4 @@ This is a full-stack application. The frontend is built with React, HTML, and CS
 
 ### Home Page
 
-![Home Page](./Readme_photos/HomePage.png)
+![Home Page](./Readme_Photos/HomePage.png)
