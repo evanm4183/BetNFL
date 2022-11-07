@@ -3,7 +3,7 @@
 
 ## Overview
 
-BetNFL is a sports betting website for moneyline bets on NFL games. The purpose of this site is to create a marketplace for sports betting. It provides bettors with a wide variety of sportsbooks to choose from, and it provides sportsbooks with a place to publish their odds for prospective customers. DISCLAIMER: This app was built for educational purposes, so all of the money within the app is simulated and not real.
+BetNFL is a sports betting website for moneyline bets on NFL games. The purpose of this site is to create a marketplace for sports betting. It provides bettors with a wide variety of sportsbooks to choose from, and it provides sportsbooks with a place to publish their odds to prospective customers. DISCLAIMER: This app was built for educational purposes, so all of the money within the app is simulated and not real.
 
 ## Features
 
@@ -17,3 +17,9 @@ BetNFL is a sports betting website for moneyline bets on NFL games. The purpose 
 ## Tech Stack
 
 This is a full-stack application. The frontend is built with React, HTML, and CSS, and the backend is built with C#, .NET, and SQL Server.
+
+## Views
+
+### Home Page
+
+![Home Page](./Readme_photos/HomePage.png)
