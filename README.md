@@ -41,5 +41,6 @@ When logged in as an admin, this view shows all the games with open bets. Howeve
 ![Process Bets](./Readme_Photos/ProcessBets.png)
 
 ### ERD
+This is the data model I created to build the site.
 
 ![ERD](./Readme_Photos/ERDDark.png)
