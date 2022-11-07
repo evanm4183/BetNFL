@@ -31,7 +31,7 @@ As stated above, this is the view for bettors when they click on a game. Further
 ![View Odds](./Readme_Photos/AvailableBets.png)
 
 ### Profile
-This is the profile page where bettors and sportsbooks can view their account details. Most importantly, this is where they keep track of their balance and can add funds as needed. Since this app does not use real money, all a user has to do to add funds is fill out the input and click "Process Transaction".
+This is the profile page where bettors and sportsbooks can view their account details. Most importantly, this is where they keep track of their balance and can add funds as needed. Since this app does not use real money, all a user has to do to add funds is enter an amount and click "Process Transaction".
 
 ![View Odds](./Readme_Photos/Profile.png)
 
