@@ -33,7 +33,9 @@ As stated above, this is the view for bettors when they click on a game. Further
 ### Profile
 This is the profile page where bettors and sportsbooks can view their account details. Most importantly, this is where they keep track of their balance and can add funds as needed. Since this app does not use real money, all a user has to do to add funds is enter an amount and click "Process Transaction".
 
-![View Odds](./Readme_Photos/Profile.png)
+![Profile](./Readme_Photos/Profile.png)
 
 ### Process Bets
 This view shows all the games with unprocessed bets. However, only bets on games with final scores can be processed. When clicking "Process Bets", funds will be automatically added to or subtracted from bettors and sportsbooks in accordance with the odds and winner of the bet for all bets placed on the game.
+
+![Process Bets](./Readme_Photos/ProcessBets.png)
