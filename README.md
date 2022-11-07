@@ -21,5 +21,19 @@ This is a full-stack application. The frontend is built with React, HTML, and CS
 ## Views
 
 ### Home Page
+This is the view when a bettor or sportsbook logs in to the site. A bettor can click on a game to see the odds offered by every sportsbook, and sportsbooks can click on a game to adjust their odds.
 
 ![Home Page](./Readme_Photos/HomePage.png)
+
+### Available Bets
+As stated above, this is the view for bettors when they click on a game. Furthermore, bettors can click on the card with the odds they like and are given a form to place a bet. 
+
+![View Odds](./Readme_Photos/AvailableBets.png)
+
+### Profile
+This is the profile page where bettors and sportsbooks can view their account details. Most importantly, this is where they keep track of their balance and add funds as needed. Since this app does not use real money, all a user has to do to add funds is fill out the input and click "Process Transaction".
+
+![View Odds](./Readme_Photos/Profile.png)
+
+### Process Bets
+This view shows all the games with unprocessed bets. However, only bets on games with final scores can be processed. When clicking "Process Bets", funds will be automatically added to or subtracted from bettors and sportsbooks in accordance with the odds and winner of the bet for all bets placed on the game.
