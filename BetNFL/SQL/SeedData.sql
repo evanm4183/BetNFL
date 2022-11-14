@@ -41,3 +41,19 @@ INSERT INTO BetType (Name)
 VALUES ('moneyline'),
 	   ('over/under'),
 	   ('spread');
+
+INSERT INTO UserType (Name)
+VALUES ('bettor'),
+	   ('sportsbook'),
+	   ('admin');
+
+INSERT INTO UserProfile
+	(
+		UserTypeId, Email, Username, FirebaseUserId,
+		AvailableFunds, IsApproved
+	)
+VALUES
+	(
+		3, 'admin@example.com', 'admin', 
+		'insert_your_firebaseId_here', 0, 1
+	);
