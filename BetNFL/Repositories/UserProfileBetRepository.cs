@@ -98,7 +98,7 @@ namespace BetNFL.Repositories
                             LEFT JOIN BetType bt ON bt.Id = b.BetTypeId
                         WHERE b.UserProfileId = @userId 
                             AND upb.ProcessedDateTime IS NULL
-                        ORDER BY b.GameId, upb.CreateDateTime DESC
+                        ORDER BY upb.CreateDateTime DESC
                     ";
                     cmd.Parameters.AddWithValue("@userId", userId);
 

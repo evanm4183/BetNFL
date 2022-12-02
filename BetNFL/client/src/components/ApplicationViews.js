@@ -11,6 +11,7 @@ import PlaceBetForm from "./bets/PlaceBetForm";
 import OpenBetsList from "./bets/OpenBetsList";
 import ProfilePage from "./userProfile/ProfilePage";
 import ProcessBetsList from "./bets/ProcessBetsList";
+import SettledBetsList from "./bets/SettledBetsList";
 import "../App.css";
 
 export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
@@ -62,6 +63,10 @@ export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
                 <Route 
                     path="openBets" 
                     element={isLoggedIn ? <OpenBetsList isSportsbook={isSportsbook}/> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="settledBets" 
+                    element={isLoggedIn ? <SettledBetsList /> : <Navigate to="/login" />} 
                 />
                 <Route 
                     path="profile" 

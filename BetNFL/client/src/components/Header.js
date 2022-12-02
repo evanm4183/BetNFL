@@ -57,6 +57,9 @@ export default function Header({ isLoggedIn, isAdmin }) {
                     <NavLink tag={RRNavLink} to="/openBets">Open Bets</NavLink>
                   </NavItem>
                   <NavItem>
+                    <NavLink tag={RRNavLink} to="/settledBets">Settled Bets</NavLink>
+                  </NavItem>
+                  <NavItem>
                     <NavLink tag={RRNavLink} to="/profile">Profile</NavLink>
                   </NavItem>
                 </>
