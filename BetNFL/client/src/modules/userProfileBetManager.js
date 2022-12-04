@@ -24,6 +24,17 @@ export const getSportsbookOpenBets = () => {
     });
 }
 
+export const getBettorSettledBets = () => {
+    return getToken().then((token) => {
+        return fetch(`${apiUrl}/BettorSettledBets`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        }).then((res) => res.json());
+    });
+}
+
 export const postUserProfileBet = (upBet) => {
     return getToken().then((token) => {
         return fetch(apiUrl, {
