@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-
-export default function SettledBetCard({settledBet}) {
+export default function SettledBetCard({settledBet, isSportsbook}) {
     const getOddsString = (num) => {
         if (num > 0) {
             return `+${num}`;
@@ -9,8 +7,14 @@ export default function SettledBetCard({settledBet}) {
         }
     }
 
-    const getSide = (settledBet) => {
-        if (settledBet.side === 1) {
+    const getSide = (settledBet, isSportsbook) => {
+        let side = settledBet.side;
+
+        if (isSportsbook && side === 1) {
+            return settledBet.bet.game.homeTeam.abbreviation;
+        } else if (isSportsbook && side === 2) {
+            return settledBet.bet.game.awayTeam.abbreviation;
+        } if (side === 1) {
             const abv = settledBet.bet.game.awayTeam.abbreviation;
             const odds = getOddsString(settledBet.bet.awayTeamOdds);
 
@@ -31,21 +35,39 @@ export default function SettledBetCard({settledBet}) {
         }
     }
 
-    const getNetChange = (settledBet) => {
-        if (settledBet.bet.game.awayTeamScore < settledBet.bet.game.homeTeamScore) {
-            if (settledBet.side === 1) {
-                return `- $${settledBet.betAmount}`;
+    const getNetChange = (settledBet, isSportsbook) => {
+        if (isSportsbook) {
+            if (settledBet.bet.game.awayTeamScore < settledBet.bet.game.homeTeamScore) {
+                if (settledBet.side === 1) {
+                    return `+ $${settledBet.betAmount}`;
+                } else {
+                    return `- $${calcWinnings(settledBet.betAmount, settledBet.bet.homeTeamOdds)}`
+                }
+            } else if (settledBet.bet.game.awayTeamScore > settledBet.bet.game.homeTeamScore) {
+                if (settledBet.side === 1) {
+                    return `- $${calcWinnings(settledBet.betAmount, settledBet.bet.awayTeamOdds)}`
+                } else {
+                    return `+ $${settledBet.betAmount}`;
+                }
             } else {
-                return `+ $${calcWinnings(settledBet.betAmount, settledBet.bet.homeTeamOdds)}`
-            }
-        } else if (settledBet.bet.game.awayTeamScore > settledBet.bet.game.homeTeamScore) {
-            if (settledBet.side === 1) {
-                return `+ $${calcWinnings(settledBet.betAmount, settledBet.bet.awayTeamOdds)}`
-            } else {
-                return `- $${settledBet.betAmount}`;
+                return `$0`;
             }
         } else {
-            return `$0`;
+            if (settledBet.bet.game.awayTeamScore < settledBet.bet.game.homeTeamScore) {
+                if (settledBet.side === 1) {
+                    return `- $${settledBet.betAmount}`;
+                } else {
+                    return `+ $${calcWinnings(settledBet.betAmount, settledBet.bet.homeTeamOdds)}`;
+                }
+            } else if (settledBet.bet.game.awayTeamScore > settledBet.bet.game.homeTeamScore) {
+                if (settledBet.side === 1) {
+                    return `+ $${calcWinnings(settledBet.betAmount, settledBet.bet.awayTeamOdds)}`;
+                } else {
+                    return `- $${settledBet.betAmount}`;
+                }
+            } else {
+                return `$0`;
+            }
         }
     }
 
@@ -71,7 +93,7 @@ export default function SettledBetCard({settledBet}) {
                 <strong>Net Change: </strong>
                     <div>
                         {
-                            getNetChange(settledBet)
+                            getNetChange(settledBet, isSportsbook)
                         }
                     </div>
             </div>
@@ -85,7 +107,7 @@ export default function SettledBetCard({settledBet}) {
                 <strong>Side: </strong>
                     <div>
                         {
-                            getSide(settledBet)
+                            getSide(settledBet, isSportsbook)
                         }
                     </div>
             </div>
@@ -110,10 +132,23 @@ export default function SettledBetCard({settledBet}) {
                     </div>
             </div>
             <div className="settled-bet-section" style={{backgroundColor: "gainsboro", width: "12%"}}>
-                <strong>Sportsbook: </strong>
-                    <div>
-                        {settledBet.bet.userProfile.username}
-                    </div>
+                {
+                    isSportsbook
+                    ?
+                        <>
+                            <strong>Username: </strong>
+                            <div>
+                                {settledBet.userProfile.username}
+                            </div>
+                        </>
+                    :
+                        <>
+                            <strong>Sportsbook: </strong>
+                            <div>
+                                {settledBet.bet.userProfile.username}
+                            </div>
+                        </>
+                } 
             </div>
             <div className="settled-bet-section" style={{width: "18%"}}>
                 <strong>Date Placed: </strong>

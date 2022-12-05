@@ -66,7 +66,7 @@ export default function ApplicationViews({isLoggedIn, isAdmin, isSportsbook}) {
                 />
                 <Route 
                     path="settledBets" 
-                    element={isLoggedIn ? <SettledBetsList /> : <Navigate to="/login" />} 
+                    element={isLoggedIn ? <SettledBetsList isSportsbook={isSportsbook}/> : <Navigate to="/login" />} 
                 />
                 <Route 
                     path="profile" 

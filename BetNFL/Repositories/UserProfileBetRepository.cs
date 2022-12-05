@@ -76,7 +76,8 @@ namespace BetNFL.Repositories
                                awt.Abbreviation AwayAbbreviation, awt.LogoUrl AwayLogoUrl,
                                ht.LocationName HomeLocationName, ht.TeamName HomeTeamName, 
                                ht.Abbreviation HomeAbbreviation, ht.LogoUrl HomeLogoUrl,
-                               sb.Username, bt.Name, btr.Username BettorUsername
+                               sb.Username, 
+                               bt.Name, btr.Username BettorUsername
                         FROM UserProfileBet upb
                             LEFT JOIN Bet b ON b.Id = upb.BetId
                             LEFT JOIN Game g ON g.Id = b.GameId
@@ -164,6 +165,61 @@ namespace BetNFL.Repositories
                         while (reader.Read())
                         {
                             var settledBet = DbUtils.ReadUserProfileBet(reader);
+
+                            settledBets.Add(settledBet);
+                        }
+
+                        return settledBets;
+                    }
+                }
+            }
+        }
+
+        public List<UserProfileBet> GetSportsbookSettledBets(int userId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT upb.Id UserProfileBetId, upb.UserProfileId BettorId, upb.BetId,
+                               upb.WinnerId, upb.Side, upb.BetAmount, 
+                               upb.CreateDateTime upbCreateDateTime, upb.ProcessedDateTime,
+                               b.Id BetId, b.UserProfileId, b.BetTypeId, b.Line, 
+                               b.AwayTeamOdds, b.HomeTeamOdds, b.CreateDateTime, b.isLive,
+                               g.Id GameId, g.HomeTeamId, g.AwayTeamId, g.HomeTeamScore,
+                               g.AwayTeamScore, g.KickoffTime, g.[Week], g.[Year],
+                               awt.LocationName AwayLocationName, awt.TeamName AwayTeamName, 
+                               awt.Abbreviation AwayAbbreviation, awt.LogoUrl AwayLogoUrl,
+                               ht.LocationName HomeLocationName, ht.TeamName HomeTeamName, 
+                               ht.Abbreviation HomeAbbreviation, ht.LogoUrl HomeLogoUrl,
+                               sb.Username, bt.Name, btr.Username BettorUsername
+                        FROM UserProfileBet upb
+                            LEFT JOIN Bet b ON b.Id = upb.BetId
+                            LEFT JOIN Game g ON g.Id = b.GameId
+                            LEFT JOIN Team ht ON ht.id = g.HomeTeamId
+                            LEFT JOIN Team awt ON awt.id = g.AwayTeamId
+                            LEFT JOIN UserProfile sb ON sb.Id = b.UserProfileId
+                            LEFT JOIN UserProfile btr ON btr.Id = upb.UserProfileId
+                            LEFT JOIN BetType bt ON bt.Id = b.BetTypeId
+                        WHERE b.UserProfileId = @userId 
+                            AND upb.ProcessedDateTime IS NOT NULL
+                        ORDER BY upb.ProcessedDateTime DESC
+                    ";
+                    cmd.Parameters.AddWithValue("@userId", userId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        var settledBets = new List<UserProfileBet>();
+
+                        while (reader.Read())
+                        {
+                            var settledBet = DbUtils.ReadUserProfileBet(reader);
+                            settledBet.UserProfile = new UserProfile()
+                            {
+                                Username = DbUtils.GetString(reader, "BettorUsername")
+                            };
 
                             settledBets.Add(settledBet);
                         }

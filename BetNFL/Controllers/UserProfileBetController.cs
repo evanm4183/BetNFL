@@ -40,6 +40,13 @@ namespace BetNFL.Controllers
             return Ok(_upBetRepo.GetBettorSettledBets(currentUser.Id));
         }
 
+        [HttpGet("SportsbookSettledBets")]
+        public IActionResult GetSportsbookSettledBets()
+        {
+            var currentUser = AuthUtils.GetCurrentUserProfile(User, _userProfileRepo);
+            return Ok(_upBetRepo.GetSportsbookSettledBets(currentUser.Id));
+        }
+
         [HttpPost]
         public IActionResult PostUserProfileBet(UserProfileBet upBet)
         {
