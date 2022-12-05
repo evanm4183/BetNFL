@@ -47,18 +47,7 @@ namespace BetNFL.Repositories
 
                         while (reader.Read())
                         {
-                            UserProfileBet openBet = new UserProfileBet()
-                            {
-                                Id = DbUtils.GetInt(reader, "UserProfileBetId"),
-                                UserProfileId = DbUtils.GetInt(reader, "BettorId"),
-                                BetId = DbUtils.GetInt(reader, "BetId"),
-                                WinnerId = DbUtils.GetNullableInt(reader, "WinnerId"),
-                                Side = DbUtils.GetInt(reader, "Side"),
-                                BetAmount = DbUtils.GetDecimal(reader, "BetAmount"),
-                                CreateDateTime = DbUtils.GetDateTime(reader, "upbCreateDateTime"),
-                                Bet = DbUtils.ReadBet(reader)
-                            };
-                            openBet.Bet.Game = DbUtils.ReadGame(reader);
+                            UserProfileBet openBet = DbUtils.ReadUserProfileBet(reader);
 
                             openBets.Add(openBet);
                         }

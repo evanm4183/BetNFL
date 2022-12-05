@@ -4,7 +4,6 @@ import { getBettorSettledBets } from "../../modules/userProfileBetManager"
 
 export default function SettledBetsList() {
     const [settledBets, setSettledBets] = useState();
-    console.log(JSON.stringify(settledBets));
     
     useEffect(() => {
         getBettorSettledBets().then((settledBets) => {
