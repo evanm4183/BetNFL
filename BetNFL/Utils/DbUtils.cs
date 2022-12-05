@@ -136,5 +136,25 @@ namespace BetNFL.Utils
 
             return bet;
         }
+
+        // must alias UserProfileBet.Id as "UserProfileBetId" and UserProfileBet.UserProfileId as "BettorId"
+        public static UserProfileBet ReadUserProfileBet(SqlDataReader reader)
+        {
+            var upb = new UserProfileBet()
+            {
+                Id = DbUtils.GetInt(reader, "UserProfileBetId"),
+                UserProfileId = DbUtils.GetInt(reader, "BettorId"),
+                BetId = DbUtils.GetInt(reader, "BetId"),
+                WinnerId = DbUtils.GetNullableInt(reader, "WinnerId"),
+                Side = DbUtils.GetInt(reader, "Side"),
+                BetAmount = DbUtils.GetDecimal(reader, "BetAmount"),
+                CreateDateTime = DbUtils.GetDateTime(reader, "upbCreateDateTime"),
+                ProcessedDateTime = DbUtils.GetDateTime(reader, "ProcessedDateTime"),
+                Bet = DbUtils.ReadBet(reader)
+            };
+            upb.Bet.Game = DbUtils.ReadGame(reader);
+
+            return upb;
+        }
     }
 }
